@@ -41,7 +41,8 @@ export class MapService {
         const wmsSource = new ImageWMS({
           params: {
             LAYERS: 'northtech:cvrgeokodet',
-            CQL_FILTER: "navn_tekst ilike  '% klatre % ",
+            //prettier-ignore
+            CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
           },
           projection: 'EPSG:900913',
           url: 'https://gs.demo.geoteamwork.com/northtech/wms?',
