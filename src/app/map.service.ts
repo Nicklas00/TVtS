@@ -55,12 +55,12 @@ export class MapService {
         });
         const wmsSource = new ImageWMS({
           params: {
-            LAYERS: 'northtech:cvrgeokodet',
+            LAYERS: 'topp:Kommuneinddeling',
             //prettier-ignore
-            CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
+            //CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
           },
-          projection: 'EPSG:900913',
-          url: 'https://gs.demo.geoteamwork.com/northtech/wms?',
+          projection: 'EPSG:25832',
+          url: 'http://localhost/geoserver/topp/wms?',
         });
 
         olMap
@@ -77,7 +77,7 @@ export class MapService {
         this.mouseEvents.setMap(olMap);
         // Hook up the FeatureEvent to the layer we want to listen to:
         this.featureEvents
-          .setSource(wmsSource, 'northtech:cvrgeokodet')
+          .setSource(wmsSource, 'topp:Kommuneinddeling')
           .setMouseEvents(this.mouseEvents);
       }
     });
