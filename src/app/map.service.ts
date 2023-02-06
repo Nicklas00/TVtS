@@ -8,14 +8,29 @@ import { Map, View } from 'ol';
 import { transform } from 'ol/proj';
 import { ImageWMS } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
+import {
+  mouseCoordinateConverter,
+  MouseEvents,
+} from '../openlayers-tools/mouse-events';
+import { map } from 'rxjs/internal/operators/map';
+import { FeatureEvents } from '../openlayers-tools/feature-events';
 
 @Injectable({ providedIn: 'root' })
 export class MapService {
+  readonly mouseEvents = new MouseEvents();
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
+    // Demo output of the clicked coordinates. Notice that the MouseEvents object and its observables are available immediately,
+    // even though it has not yet been hooked up to a map creating actual click events:
+    this.mouseEvents.clicks
+      .pipe(map(mouseCoordinateConverter('CRS:84')))
+      .subscribe((coords) => console.log('clicked CRS:84', coords));
+    this.mouseEvents.clicks
+      .pipe(map(mouseCoordinateConverter('EPSG:25832')))
+      .subscribe((coords) => console.log('clicked EPSG:25832', coords));
   }
-
+  readonly featureEvents = new FeatureEvents();
   createMap(): void {
     createWmtsLayer(
       'https://tile.geoteamwork.com/service/wmts?REQUEST=getcapabilities',
@@ -58,6 +73,12 @@ export class MapService {
             )
           );
         olMap.addLayer(new ImageLayer({ source: wmsSource }));
+        // Hook up the MouseEvents handler with our actual map:
+        this.mouseEvents.setMap(olMap);
+        // Hook up the FeatureEvent to the layer we want to listen to:
+        this.featureEvents
+          .setSource(wmsSource, 'northtech:cvrgeokodet')
+          .setMouseEvents(this.mouseEvents);
       }
     });
   }
