@@ -96,8 +96,8 @@ export class MapService {
               new Style({
                 image: new Icon({
                   color: '#F44336',
-                  src: '../assets/cat.jpg',
-                  imgSize: [20, 20],
+                  src: '../assets/map-marker.png',
+                  imgSize: [40, 40],
                 }),
               })
             );
