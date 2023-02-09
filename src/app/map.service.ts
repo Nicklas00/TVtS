@@ -20,7 +20,6 @@ import { fromLonLat } from 'ol/proj.js';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import VectorSource from 'ol/source/Vector';
 import { Icon, Style } from 'ol/style';
-import OSM from 'ol/source/OSM';
 import { Geometry } from 'ol/geom';
 import BaseLayer from 'ol/layer/Base';
 
@@ -29,7 +28,7 @@ export class MapService {
   map: Map | undefined;
   testp: Feature<Geometry> | undefined;
   vectorSource: VectorSource<Geometry> | undefined;
-  vectorLayer: BaseLayer | undefined;
+  vectorLayer!: BaseLayer;
   rasterLayer: any;
 
   readonly mouseEvents = new MouseEvents();
@@ -47,29 +46,6 @@ export class MapService {
   }
   readonly featureEvents = new FeatureEvents();
   createMap(): void {
-    this.testp = new Feature({
-      geometry: new Point(fromLonLat([12.540444310020543, 55.670013312732465])),
-    });
-
-    this.testp.setStyle(
-      new Style({
-        image: new Icon({
-          color: '#8959A8',
-          crossOrigin: 'anonymous',
-          src: 'assets/marker/marker-blue.png',
-          imgSize: [20, 20],
-        }),
-      })
-    );
-
-    this.vectorSource = new VectorSource({
-      features: [this.testp],
-    });
-
-    this.vectorLayer = new VectorLayer({
-      source: this.vectorSource,
-    });
-
     createWmtsLayer(
       'https://tile.geoteamwork.com/service/wmts?REQUEST=getcapabilities',
       { layer: 'OSM_europe', format: 'image/png' }
@@ -88,7 +64,6 @@ export class MapService {
           view: new View({
             projection: source.getProjection()!,
             resolutions: source.getTileGrid()!.getResolutions(),
-            center: fromLonLat([12.540444310020543, 55.670013312732465]),
             zoom: 8,
           }),
         });
@@ -113,8 +88,36 @@ export class MapService {
             )
           );
         olMap.addLayer(new ImageLayer({ source: wmsSource }));
+        //olMap.addLayer(new ImageLayer({ source: this.vectorLayer }));
         // Hook up the MouseEvents handler with our actual map:
         this.mouseEvents.setMap(olMap);
+
+        const coordinate = this.mouseEvents.clicks
+          .pipe(map(mouseCoordinateConverter('CRS:84')))
+          .subscribe((coords) => {
+            this.testp = new Feature({
+              geometry: new Point(fromLonLat([coords[0], coords[1]])),
+            });
+
+            this.testp.setStyle(
+              new Style({
+                image: new Icon({
+                  color: '#8959A8',
+                  //crossOrigin: 'anonymous',
+                  src: 'assets/marker/marker-blue.png',
+                  imgSize: [20, 20],
+                }),
+              })
+            );
+
+            this.vectorSource = new VectorSource({
+              features: [this.testp],
+            });
+
+            this.vectorLayer = new VectorLayer({
+              source: this.vectorSource,
+            });
+          });
         // Hook up the FeatureEvent to the layer we want to listen to:
         this.featureEvents
           .setSource(wmsSource, 'topp:Kommuneinddeling')
