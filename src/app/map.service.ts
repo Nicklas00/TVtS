@@ -4,8 +4,8 @@ import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { createWmtsLayer } from '../openlayers-tools/wmts-builder';
 import { defaults } from 'ol/interaction';
-import { Map, View } from 'ol';
-import { transform } from 'ol/proj';
+import { Feature, Map, View } from 'ol';
+import { fromLonLat, transform } from 'ol/proj';
 import { ImageWMS } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
 import {
@@ -14,9 +14,22 @@ import {
 } from '../openlayers-tools/mouse-events';
 import { map } from 'rxjs/internal/operators/map';
 import { FeatureEvents } from '../openlayers-tools/feature-events';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
+import { Icon, Style } from 'ol/style';
+import { Geometry } from 'ol/geom';
+import BaseLayer from 'ol/layer/Base';
+import Point from 'ol/geom/Point';
+
 
 @Injectable({ providedIn: 'root' })
 export class MapService {
+  map: Map | undefined;
+  testp: Feature<Geometry> | undefined;
+  vectorSource: VectorSource<Geometry> | undefined;
+  vectorLayer!: BaseLayer;
+  rasterLayer: any;
+
   readonly mouseEvents = new MouseEvents();
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
@@ -38,6 +51,8 @@ export class MapService {
     ).then((wmtsLayer) => {
       const source = wmtsLayer.getSource();
 
+    const vectorSource = new VectorSource({});
+
       if (source) {
         const olMap = new Map({
           target: 'map',
@@ -46,7 +61,9 @@ export class MapService {
             altShiftDragRotate: false,
             pinchRotate: false,
           }),
-          layers: [wmtsLayer],
+          layers: [wmtsLayer, new VectorLayer({
+            source: vectorSource
+          })],
           view: new View({
             projection: source.getProjection()!,
             resolutions: source.getTileGrid()!.getResolutions(),
@@ -73,6 +90,27 @@ export class MapService {
             )
           );
         olMap.addLayer(new ImageLayer({ source: wmsSource }));
+
+        this.mouseEvents.clicks
+          .pipe(map(mouseCoordinateConverter('CRS:84')))
+          .subscribe((coords) => {
+            this.testp = new Feature({
+              geometry: new Point(fromLonLat([coords[0], coords[1]])),
+            });
+
+            this.testp.setStyle(
+              new Style({
+                image: new Icon({
+                  color: '#8959A8',
+                  //crossOrigin: 'anonymous',
+                  src: 'assets/cat.webp',
+                  imgSize: [20, 20],
+                }),
+              })
+            );
+              vectorSource.addFeature(this.testp);
+          });
+
         // Hook up the MouseEvents handler with our actual map:
         this.mouseEvents.setMap(olMap);
         // Hook up the FeatureEvent to the layer we want to listen to:
