@@ -17,19 +17,10 @@ import { FeatureEvents } from '../openlayers-tools/feature-events';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Icon, Style } from 'ol/style';
-import { Geometry } from 'ol/geom';
-import BaseLayer from 'ol/layer/Base';
 import Point from 'ol/geom/Point';
-
 
 @Injectable({ providedIn: 'root' })
 export class MapService {
-  map: Map | undefined;
-  testp: Feature<Geometry> | undefined;
-  vectorSource: VectorSource<Geometry> | undefined;
-  vectorLayer!: BaseLayer;
-  rasterLayer: any;
-
   readonly mouseEvents = new MouseEvents();
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
@@ -51,7 +42,7 @@ export class MapService {
     ).then((wmtsLayer) => {
       const source = wmtsLayer.getSource();
 
-    const vectorSource = new VectorSource({});
+      const vectorSource = new VectorSource({});
 
       if (source) {
         const olMap = new Map({
@@ -61,9 +52,12 @@ export class MapService {
             altShiftDragRotate: false,
             pinchRotate: false,
           }),
-          layers: [wmtsLayer, new VectorLayer({
-            source: vectorSource
-          })],
+          layers: [
+            wmtsLayer,
+            new VectorLayer({
+              source: vectorSource,
+            }),
+          ],
           view: new View({
             projection: source.getProjection()!,
             resolutions: source.getTileGrid()!.getResolutions(),
@@ -94,21 +88,20 @@ export class MapService {
         this.mouseEvents.clicks
           .pipe(map(mouseCoordinateConverter('CRS:84')))
           .subscribe((coords) => {
-            this.testp = new Feature({
+            const testp = new Feature({
               geometry: new Point(fromLonLat([coords[0], coords[1]])),
             });
 
-            this.testp.setStyle(
+            testp.setStyle(
               new Style({
                 image: new Icon({
-                  color: '#8959A8',
-                  //crossOrigin: 'anonymous',
-                  src: 'assets/cat.webp',
+                  color: '#F44336',
+                  src: '../assets/cat.jpg',
                   imgSize: [20, 20],
                 }),
               })
             );
-              vectorSource.addFeature(this.testp);
+            vectorSource.addFeature(testp);
           });
 
         // Hook up the MouseEvents handler with our actual map:
