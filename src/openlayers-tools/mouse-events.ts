@@ -78,8 +78,7 @@ will automatically de-register the previous.
   }
 }
 /**
- * Creates a function which maps the coordinates in a MapBrowserEvent
-to coordinates in a given CRS, automatically
+ * Creates a function which maps the coordinates in a MapBrowserEvent to coordinates in a given CRS, automatically
  * taking into account with the map view's CRS is.
  *
  * @example
