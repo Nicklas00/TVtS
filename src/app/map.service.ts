@@ -84,7 +84,8 @@ export class MapService {
             )
           );
         olMap.addLayer(new ImageLayer({ source: wmsSource }));
-
+        
+        let markerCount=0;
         this.mouseEvents.clicks
           .pipe(map(mouseCoordinateConverter('CRS:84')))
           .subscribe((coords) => {
@@ -101,7 +102,15 @@ export class MapService {
                 }),
               })
             );
+            if(markerCount < 2){
             vectorSource.addFeature(testp);
+            markerCount += 1;
+            }else{
+              vectorSource.clear();
+              //vectorSource.addFeature(testp);
+              markerCount = 0;
+            }
+            
           });
 
         // Hook up the MouseEvents handler with our actual map:
