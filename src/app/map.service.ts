@@ -71,7 +71,7 @@ export class MapService {
             //CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
           },
           projection: 'EPSG:25832',
-          url: 'http://localhost/geoserver/topp/wms?',
+          url: 'http://localhost:8080/geoserver/topp/wms?',
         });
 
         olMap
