@@ -76,8 +76,18 @@ export class MapService {
             //prettier-ignore
             //CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
           },
-          projection: 'EPSG:25832',
-          url: 'http://localhost/geoserver/topp/wms?',
+          projection: 'EPSG:4326',
+          url: 'http://localhost/geoserver/postgis/wms?',
+        });
+        const routesSource = new ImageWMS({
+          params: {
+            LAYERS: 'postgis:routes',
+            //LAYERS: 'topp:Kommuneinddeling',
+            //prettier-ignore
+            //CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
+          },
+          projection: 'EPSG:4326',
+          url: 'http://localhost/geoserver/postgis/wms?',
         });
 
         olMap.getView().setCenter(
