@@ -66,24 +66,27 @@ export class MapService {
         });
         const wmsSource = new ImageWMS({
           params: {
-            LAYERS: 'topp:Kommuneinddeling',
+            LAYERS: 'postgis:accident_points',
+            //LAYERS: 'topp:Kommuneinddeling',
             //prettier-ignore
             //CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
           },
           projection: 'EPSG:25832',
-          url: 'http://localhost:8080/geoserver/topp/wms?',
+          url: 'http://localhost/geoserver/topp/wms?',
         });
 
         olMap
           .getView()
           .setCenter(
             transform(
-              [721371, 6174352],
+              //[721371, 6174352],
+              [588061, 6139595],
               'EPSG:25832',
               olMap.getView().getProjection()
             )
           );
         olMap.addLayer(new ImageLayer({ source: wmsSource }));
+        olMap.addLayer(new ImageLayer({ source: routesSource }));
         
         let markerCount=0;
         this.mouseEvents.clicks
