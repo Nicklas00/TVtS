@@ -86,20 +86,19 @@ export class MapService {
           url: 'http://localhost/geoserver/postgis/wms?',
         });
 
-        olMap
-          .getView()
-          .setCenter(
-            transform(
-              //[721371, 6174352],
-              [588061, 6139595],
-              'EPSG:25832',
-              olMap.getView().getProjection()
-            )
-          );
+        olMap.getView().setCenter(
+          transform(
+            //[721371, 6174352],
+            [588061, 6139595],
+            'EPSG:25832',
+            olMap.getView().getProjection()
+          )
+        );
         olMap.addLayer(new ImageLayer({ source: wmsSource }));
         olMap.addLayer(new ImageLayer({ source: routesSource }));
-        
-        let markerCount=0;
+
+        let markerCount = 0;
+
         this.mouseEvents.clicks
           .pipe(map(mouseCoordinateConverter('CRS:84')))
           .subscribe((coords) => {
@@ -116,15 +115,14 @@ export class MapService {
                 }),
               })
             );
-            if(markerCount < 2){
-            vectorSource.addFeature(testp);
-            markerCount += 1;
-            }else{
+            if (markerCount < 2) {
+              vectorSource.addFeature(testp);
+              markerCount += 1;
+            } else {
               vectorSource.clear();
               //vectorSource.addFeature(testp);
               markerCount = 0;
             }
-            
           });
 
         // Hook up the MouseEvents handler with our actual map:
