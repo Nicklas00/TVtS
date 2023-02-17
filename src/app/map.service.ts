@@ -27,9 +27,14 @@ export class MapService {
     register(proj4);
     // Demo output of the clicked coordinates. Notice that the MouseEvents object and its observables are available immediately,
     // even though it has not yet been hooked up to a map creating actual click events:
+    let points = "";
     this.mouseEvents.clicks
       .pipe(map(mouseCoordinateConverter('CRS:84')))
-      .subscribe((coords) => console.log('clicked CRS:84', coords));
+      .subscribe((coords) => {
+        console.log('clicked CRS:84', coords);
+        points += `insert into accident_points(ext_id, geom, type) values('XXXX', ST_GeomFromText('POINT(${coords[0].toString().substring(0,8)} ${coords[1].toString().substring(0,8)})', 4326), 'ukendt');` + `\n`;
+        console.log(points);
+      });
     this.mouseEvents.clicks
       .pipe(map(mouseCoordinateConverter('EPSG:25832')))
       .subscribe((coords) => console.log('clicked EPSG:25832', coords));
@@ -129,10 +134,12 @@ export class MapService {
 
         // Hook up the MouseEvents handler with our actual map:
         this.mouseEvents.setMap(olMap);
+        
         // Hook up the FeatureEvent to the layer we want to listen to:
-        this.featureEvents
-          .setSource(wmsSource, 'topp:Kommuneinddeling')
-          .setMouseEvents(this.mouseEvents);
+        /*this.featureEvents
+          //.setSource(wmsSource, 'topp:Kommuneinddeling')
+          .setSource(wmsSource, 'postgis:accident_points')
+          .setMouseEvents(this.mouseEvents);*/
       }
     });
   }
