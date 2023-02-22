@@ -25,19 +25,6 @@ export class MapService {
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
-    // Demo output of the clicked coordinates. Notice that the MouseEvents object and its observables are available immediately,
-    // even though it has not yet been hooked up to a map creating actual click events:
-    let points = "";
-    this.mouseEvents.clicks
-      .pipe(map(mouseCoordinateConverter('CRS:84')))
-      .subscribe((coords) => {
-        console.log('clicked CRS:84', coords);
-        points += `insert into accident_points(ext_id, geom, type) values('XXXX', ST_GeomFromText('POINT(${coords[0].toString().substring(0,8)} ${coords[1].toString().substring(0,8)})', 4326), 'ukendt');` + `\n`;
-        console.log(points);
-      });
-    this.mouseEvents.clicks
-      .pipe(map(mouseCoordinateConverter('EPSG:25832')))
-      .subscribe((coords) => console.log('clicked EPSG:25832', coords));
   }
   readonly featureEvents = new FeatureEvents();
   createMap(): void {
@@ -83,12 +70,6 @@ export class MapService {
 
         // Hook up the MouseEvents handler with our actual map:
         this.mouseEvents.setMap(olMap);
-        
-        // Hook up the FeatureEvent to the layer we want to listen to:
-        /*this.featureEvents
-          //.setSource(wmsSource, 'topp:Kommuneinddeling')
-          .setSource(wmsSource, 'postgis:accident_points')
-          .setMouseEvents(this.mouseEvents);*/
       }
     });
   }
@@ -96,7 +77,6 @@ export class MapService {
   public addWMSToMap(olMap:Map, imageWMS:ImageWMS){
     olMap.getView().setCenter(
       transform(
-        //[721371, 6174352],
         [588061, 6139595],
         'EPSG:25832',
         olMap.getView().getProjection()
@@ -109,9 +89,6 @@ export class MapService {
     const wmsSource = new ImageWMS({
       params: {
         LAYERS: layers,
-        //LAYERS: 'topp:Kommuneinddeling',
-        //prettier-ignore
-        //CQL_FILTER: 'navn_tekst ilike \'%klatre%\'',
       },
       projection: projection,
       url: url,
@@ -143,7 +120,6 @@ export class MapService {
               markerCount += 1;
             } else {
               vectorSource.clear();
-              //vectorSource.addFeature(testp);
               markerCount = 0;
             }
           });
