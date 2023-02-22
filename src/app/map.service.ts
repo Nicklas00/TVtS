@@ -112,6 +112,7 @@ export class MapService {
                   color: '#F44336',
                   src: '../assets/map-marker.png',
                   imgSize: [40, 40],
+                  anchor: [0.5, 1]
                 }),
               })
             );
