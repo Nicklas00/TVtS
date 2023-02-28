@@ -1,0 +1,4 @@
+<div id="info-box">
+    <app-search *ngIf="originText===undefined && destinationText===undefined"></app-search>
+    <app-routes-setting [destText]="destinationText!" [originText]="originText!" *ngIf="originText!==undefined || destinationText!==undefined"></app-routes-setting>
+</div>
