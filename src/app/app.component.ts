@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     this.messageText = '';
     mapService.featureEvents.features.subscribe((features) => {
       this.featureList = features;
-      console.log(features);
+      //console.log(features);
       if (features.length === 0) {
         this.messageText = 'No features found at that location';
       } else {
