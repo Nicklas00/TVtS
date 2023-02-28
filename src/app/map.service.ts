@@ -22,6 +22,8 @@ import Point from 'ol/geom/Point';
 @Injectable({ providedIn: 'root' })
 export class MapService {
   readonly mouseEvents = new MouseEvents();
+  markerSource: VectorSource | undefined;
+  routesSources2: ImageWMS | undefined;
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
@@ -34,9 +36,10 @@ export class MapService {
     ).then((wmtsLayer) => {
       const source = wmtsLayer.getSource();
       const vectorSource = new VectorSource({});
-      const accidentPointLayers = 'postgis:accident_points';
+      const accidentPointLayers = 'postgis:uag';
       const routesLayers = 'postgis:routes';
       const epsgProjection4326 = 'EPSG:4326';
+      const epsgProjection25832 = 'EPSG:25832';
       const layerURL = 'http://localhost/geoserver/postgis/wms?';
 
       if (source) {
@@ -51,22 +54,34 @@ export class MapService {
             wmtsLayer,
             new VectorLayer({
               source: vectorSource,
+              zIndex: 10
             }),
           ],
           view: new View({
             projection: source.getProjection()!,
             resolutions: source.getTileGrid()!.getResolutions(),
-            zoom: 8,
+            zoom: 10,
           }),
         });
-        
-        const routesSource = this.createImageWMS(routesLayers,epsgProjection4326, layerURL);
-        const wmsSource = this.createImageWMS(accidentPointLayers,epsgProjection4326, layerURL);
-        
+
+        const routesSource = this.createImageWMS(
+          routesLayers,
+          epsgProjection25832,
+          layerURL,
+          'summary_id=0'
+        );
+        this.routesSources2 = routesSource;
+        const wmsSource = this.createImageWMS(
+          accidentPointLayers,
+          epsgProjection25832,
+          layerURL,
+          'id>0'//'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
+        );
+
         this.addWMSToMap(olMap, wmsSource);
         this.addWMSToMap(olMap, routesSource);
 
-        this.addPointer(vectorSource);
+        this.markerSource = vectorSource;
 
         // Hook up the MouseEvents handler with our actual map:
         this.mouseEvents.setMap(olMap);
@@ -74,57 +89,35 @@ export class MapService {
     });
   }
 
-  public addWMSToMap(olMap:Map, imageWMS:ImageWMS){
-    olMap.getView().setCenter(
-      transform(
-        [588061, 6139595],
-        'EPSG:25832',
-        olMap.getView().getProjection()
-      )
-    );
+  public addWMSToMap(olMap: Map, imageWMS: ImageWMS) {
+    olMap
+      .getView()
+      .setCenter(
+        transform(
+          [588061, 6139595],
+          'EPSG:25832',
+          olMap.getView().getProjection()
+        )
+      );
     olMap.addLayer(new ImageLayer({ source: imageWMS }));
   }
 
-  public createImageWMS(layers: string, projection: string, url: string): ImageWMS{
+  public createImageWMS(
+    layers: string,
+    projection: string,
+    url: string,
+    cql_filter: string
+  ): ImageWMS {
     const wmsSource = new ImageWMS({
       params: {
         LAYERS: layers,
+        CQL_FILTER: cql_filter
       },
       projection: projection,
       url: url,
     });
     return wmsSource;
   }
-
-  public addPointer(vectorSource: VectorSource){
-  let markerCount = 0;
-
-        this.mouseEvents.clicks
-          .pipe(map(mouseCoordinateConverter('CRS:84')))
-          .subscribe((coords) => {
-            const testp = new Feature({
-              geometry: new Point(fromLonLat([coords[0], coords[1]])),
-            });
-
-            testp.setStyle(
-              new Style({
-                image: new Icon({
-                  color: '#F44336',
-                  src: '../assets/map-marker.png',
-                  imgSize: [40, 40],
-                  anchor: [0.5, 1]
-                }),
-              })
-            );
-            if (markerCount < 2) {
-              vectorSource.addFeature(testp);
-              markerCount += 1;
-            } else {
-              vectorSource.clear();
-              markerCount = 0;
-            }
-          });
-        }
 
   
 }
