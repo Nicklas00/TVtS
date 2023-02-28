@@ -1,0 +1,6 @@
+<input type="text" value="{{searchValue}}" #searchInput (keyup)="updateSearchField($event)">
+    <button (click)="search()">?</button><button (click)="test()">!</button>
+<br>
+<div id="search-result-box">
+    <li></li>
+</div>
