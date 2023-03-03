@@ -24,6 +24,7 @@ export class MapService {
   readonly mouseEvents = new MouseEvents();
   markerSource: VectorSource | undefined;
   routesSources2: ImageWMS | undefined;
+  pointsSource: ImageWMS | undefined;
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
@@ -60,7 +61,7 @@ export class MapService {
           view: new View({
             projection: source.getProjection()!,
             resolutions: source.getTileGrid()!.getResolutions(),
-            zoom: 10,
+            zoom: 9,
           }),
         });
 
@@ -71,15 +72,26 @@ export class MapService {
           'summary_id=0'
         );
         this.routesSources2 = routesSource;
+        
         const wmsSource = this.createImageWMS(
           accidentPointLayers,
           epsgProjection25832,
           layerURL,
-          'id>0'//'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
+          'id > 0'//'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
         );
+        this.pointsSource = wmsSource;
 
         this.addWMSToMap(olMap, wmsSource);
         this.addWMSToMap(olMap, routesSource);
+
+        const squareAlvor = this.createImageWMS(
+          'postgis:uag_alle_alvor',
+          epsgProjection25832,
+          layerURL,
+          'id>0'
+        )
+
+        //this.addWMSToMap(olMap, squareAlvor);
 
         this.markerSource = vectorSource;
 
