@@ -1,5 +1,25 @@
-<button (click)="exit()"><-</button>
-<p>rute</p>
-<p>{{originText}}</p>
-<p>{{destText}}</p>
-<button (click)="route()">-></button>
+<button (click)="exit()"><-</button><br>
+
+<img src="/assets/map-marker-green.png" alt="green" class="marker-img"><input type="text" value="{{getOriginText()}}" (keyup)="searchOrigin($event)">
+<div *ngIf="originAddresses !== undefined">
+    <button (click)="clearOriginSearch()">x</button>
+    <li *ngFor="let address of originAddresses">
+        <span (click)="selectOriginAddress(address)">{{address.forslagstekst}}</span>
+    </li>
+</div>
+
+<br>
+<button (click)="switchAddresses()">v^</button>
+<br>
+
+<img src="/assets/map-marker-red.png" alt="red" class="marker-img"><input type="text" value="{{getDestinationText()}}" (keyup)="searchOrigin($event)">
+<div *ngIf="destinationAddresses !== undefined">
+    <button (click)="clearDestinationSearch()">x</button>
+    <li *ngFor="let address of originAddresses">
+        <span (click)="selectDestinationAddress(address)">{{address.forslagstekst}}</span>
+    </li>
+</div>
+
+<br><br>
+<button *ngIf="destAddress !== undefined && originAddress !== undefined" (click)="route()">-></button>
+
