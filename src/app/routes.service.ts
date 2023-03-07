@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/internal/operators/map';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { routeRequest } from './routeRequest';
 
@@ -10,15 +9,6 @@ import { routeRequest } from './routeRequest';
 export class RoutesService {
   readonly summarySubject = new ReplaySubject<routeRequest>(1);
   constructor(private httpClient: HttpClient) {}
-
-  idk() {
-    this.httpClient
-      .get(
-        'https://dawa.aws.dk/autocomplete?fuzzy=&q=hasselvej&startfra=adresse&per_side=6'
-      )
-      .pipe(map((res) => res.toString()))
-      .subscribe((data) => console.log(data));
-  }
 
   save(routeRequest: routeRequest): void {
     this.httpClient
@@ -35,5 +25,20 @@ export class RoutesService {
           // Relevant error handling here.
         },
       });
+  }
+
+  removeSelectedRoute() {
+    this.summarySubject.next({
+      id: 0, 
+      mode: '',
+      origin: {
+        lat: 0,
+        lon: 0,
+      },
+      destination: {
+        lat: 0,
+        lon: 0,
+      }
+    });
   }
 }
