@@ -21,5 +21,7 @@
 </div>
 
 <br><br>
+<button (click)="changeMode()"><-></button><span> {{mode}}</span>
+<br><br>
 <button *ngIf="destAddress !== undefined && originAddress !== undefined" (click)="route()">-></button>
 
