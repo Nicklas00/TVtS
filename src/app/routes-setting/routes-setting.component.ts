@@ -17,6 +17,8 @@ export class RoutesSettingComponent {
   originAddresses: Address[] | undefined;
   destinationAddresses: Address[] | undefined;
 
+  mode: string = 'pedestrian';
+
   constructor(
     private routesService: RoutesService,
     private mapService: MapService,
@@ -32,7 +34,7 @@ export class RoutesSettingComponent {
   route() {
     const routeRequest = {
       id: 0,
-      mode: 'pedestrian',
+      mode: this.mode,
       origin: {
         lat: this.destAddress!.data.y,
         lon: this.destAddress!.data.x,
@@ -104,6 +106,14 @@ export class RoutesSettingComponent {
       return '';
     } else {
       return this.destAddress.forslagstekst;
+    }
+  }
+
+  changeMode() {
+    if(this.mode === 'pedestrian') {
+      this.mode = 'bicycle';
+    } else {
+      this.mode = 'pedestrian';
     }
   }
 }
