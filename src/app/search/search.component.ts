@@ -25,12 +25,12 @@ export class SearchComponent {
   select(address: Address) {
     this.controlService.setDestination(address);
     this.mapService
-      .olMapReference!.getView()
+      .testMap!.getView()
       .setCenter(
         transform(
           [address.data.x, address.data.y],
           'CRS:84',
-          this.mapService.olMapReference!.getView().getProjection()
+          this.mapService.testMap!.getView().getProjection()
         )
       );
   }
