@@ -7,6 +7,8 @@ import { OverlayComponent } from './overlay/overlay.component';
 import { SearchComponent } from './search/search.component';
 import { RoutesSettingComponent } from './routes-setting/routes-setting.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LayermenuBoxComponent } from './layermenu-box/layermenu-box.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -14,13 +16,11 @@ import { HttpClientModule } from '@angular/common/http';
     TopBarComponent,
     OverlayComponent,
     SearchComponent,
-    RoutesSettingComponent
+    RoutesSettingComponent,
+    LayermenuBoxComponent,
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule
-  ],
+  imports: [BrowserModule, HttpClientModule, NoopAnimationsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
