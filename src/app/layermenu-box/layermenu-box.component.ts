@@ -26,7 +26,8 @@ export class LayermenuBoxComponent {
     this.mapService.addWMSToMap(
       this.mapService.testMap,
       this.mapService.pointsSource!,
-      'AP'
+      'AP',
+      5
     );
     console.log('added layer');
   }

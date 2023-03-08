@@ -72,7 +72,7 @@ export class MapService {
           routesLayers,
           epsgProjection25832,
           layerURL,
-          'summary_id>0'
+          'summary_id=0'
         );
         this.routesSources2 = routesSource;
 
@@ -84,8 +84,8 @@ export class MapService {
         );
         this.pointsSource = wmsSource;
 
-        this.addWMSToMap(olMap, wmsSource, 'AP');
-        this.addWMSToMap(olMap, routesSource, 'routes');
+        this.addWMSToMap(olMap, wmsSource, 'AP', 5);
+        this.addWMSToMap(olMap, routesSource, 'routes', 9);
 
         const squareAlvor = this.createImageWMS(
           'postgis:uag_alle_alvor',
@@ -104,7 +104,12 @@ export class MapService {
     });
   }
 
-  public addWMSToMap(olMap: Map, imageWMS: ImageWMS, key: string) {
+  public addWMSToMap(
+    olMap: Map,
+    imageWMS: ImageWMS,
+    key: string,
+    setZindex: number
+  ) {
     olMap
       .getView()
       .setCenter(
@@ -114,7 +119,7 @@ export class MapService {
           olMap.getView().getProjection()
         )
       );
-    const layer = new ImageLayer({ source: imageWMS });
+    const layer = new ImageLayer({ source: imageWMS, zIndex: setZindex });
     this.idkMap.set(key, layer);
     olMap.addLayer(layer);
   }
