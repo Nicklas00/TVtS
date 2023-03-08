@@ -55,9 +55,8 @@ export class ControlService {
 
   newCoords(coords: Coordinate) {
     if (this.destEmptyState) {
-      this.addressService
-        .getAddressByCoordinates(coords)
-        .subscribe((reverseAddress) => {
+      this.addressService.getAddressByCoordinates(coords).subscribe({
+        next: (reverseAddress) => {
           const address = {
             data: {
               x: reverseAddress.x,
@@ -66,11 +65,21 @@ export class ControlService {
             forslagstekst: reverseAddress.betegnelse,
           };
           this.destination.next(address);
-        });
+        },
+        error: (err) => {
+          const address = {
+            data: {
+              x: coords[0],
+              y: coords[1],
+            },
+            forslagstekst: 'Kunne ikke finde adresse',
+          };
+          this.destination.next(address);
+        },
+      });
     } else if (this.originEmptyState) {
-      this.addressService
-        .getAddressByCoordinates(coords)
-        .subscribe((reverseAddress) => {
+      this.addressService.getAddressByCoordinates(coords).subscribe({
+        next: (reverseAddress) => {
           const address = {
             data: {
               x: reverseAddress.x,
@@ -79,7 +88,18 @@ export class ControlService {
             forslagstekst: reverseAddress.betegnelse,
           };
           this.origin.next(address);
-        });
+        },
+        error: (err) => {
+          const address = {
+            data: {
+              x: coords[0],
+              y: coords[1],
+            },
+            forslagstekst: 'Kunne ikke finde adresse',
+          };
+          this.origin.next(address);
+        },
+      });
     }
   }
 

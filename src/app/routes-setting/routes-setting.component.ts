@@ -60,18 +60,24 @@ export class RoutesSettingComponent {
   }
 
   searchOrigin(x: any) {
-    this.addressService
-    .getAddressAutocomplete(x.target.value)
-    .subscribe((addressData) => {
-      this.originAddresses = addressData;
+    this.addressService.getAddressAutocomplete(x.target.value).subscribe({
+      next: (addressData) => {
+        this.originAddresses = addressData;
+      },
+      error: (err) => {
+        this.originAddresses = undefined;
+      },
     });
   }
 
   searchDestination(x: any) {
-    this.addressService
-    .getAddressAutocomplete(x.target.value)
-    .subscribe((addressData) => {
-      this.destinationAddresses = addressData;
+    this.addressService.getAddressAutocomplete(x.target.value).subscribe({
+      next: (addressData) => {
+        this.destinationAddresses = addressData;
+      },
+      error: (err) => {
+        this.destinationAddresses = undefined;
+      },
     });
   }
 
@@ -94,7 +100,7 @@ export class RoutesSettingComponent {
   }
 
   getOriginText(): string {
-    if(this.originAddress === undefined) {
+    if (this.originAddress === undefined) {
       return '';
     } else {
       return this.originAddress.forslagstekst;
@@ -102,7 +108,7 @@ export class RoutesSettingComponent {
   }
 
   getDestinationText(): string {
-    if(this.destAddress === undefined) {
+    if (this.destAddress === undefined) {
       return '';
     } else {
       return this.destAddress.forslagstekst;
@@ -110,7 +116,7 @@ export class RoutesSettingComponent {
   }
 
   changeMode() {
-    if(this.mode === 'pedestrian') {
+    if (this.mode === 'pedestrian') {
       this.mode = 'bicycle';
     } else {
       this.mode = 'pedestrian';

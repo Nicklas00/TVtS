@@ -68,7 +68,7 @@ export class MarkerService {
         new Style({
           image: new Icon({
             color: '#F44336',
-            src: '../assets/map-marker-red.png',
+            src: '../assets/map-marker-black.png',
             imgSize: [40, 40],
             anchor: [0.5, 1],
           }),
@@ -88,9 +88,10 @@ export class MarkerService {
         new Style({
           image: new Icon({
             //color: '#F44336',
-            src: '../assets/map-marker-green.png',
+            src: '../assets/dot-marker.png',
             imgSize: [40, 40],
-            anchor: [0.5, 1],
+            anchor: [0.5, 0.5],
+            scale: 0.5
           }),
         })
       );

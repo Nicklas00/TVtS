@@ -1,6 +1,6 @@
 <button (click)="exit()"><-</button><br>
 
-<img src="/assets/map-marker-green.png" alt="green" class="marker-img"><input type="text" value="{{getOriginText()}}" (keyup)="searchOrigin($event)">
+<img src="/assets/dot-marker.png" alt="green" class="marker-img"><input type="text" value="{{getOriginText()}}" (keyup)="searchOrigin($event)">
 <div *ngIf="originAddresses !== undefined">
     <button (click)="clearOriginSearch()">x</button>
     <li *ngFor="let address of originAddresses">
@@ -12,7 +12,7 @@
 <button (click)="switchAddresses()">v^</button>
 <br>
 
-<img src="/assets/map-marker-red.png" alt="red" class="marker-img"><input type="text" value="{{getDestinationText()}}" (keyup)="searchOrigin($event)">
+<img src="/assets/map-marker-black.png" alt="red" class="marker-img"><input type="text" value="{{getDestinationText()}}" (keyup)="searchOrigin($event)">
 <div *ngIf="destinationAddresses !== undefined">
     <button (click)="clearDestinationSearch()">x</button>
     <li *ngFor="let address of originAddresses">

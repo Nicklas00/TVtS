@@ -4,7 +4,7 @@ import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { createWmtsLayer } from '../openlayers-tools/wmts-builder';
 import { defaults } from 'ol/interaction';
-import { Feature, Map, View } from 'ol';
+import { Feature, Image, Map, View } from 'ol';
 import { fromLonLat, transform } from 'ol/proj';
 import { ImageWMS } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
@@ -23,8 +23,10 @@ import Point from 'ol/geom/Point';
 export class MapService {
   readonly mouseEvents = new MouseEvents();
   markerSource: VectorSource | undefined;
-  routesSources2: ImageWMS | undefined;
+  routesSources2: ImageWMS = new ImageWMS();
   pointsSource: ImageWMS | undefined;
+  testMap: Map = new Map();
+  idkMap = new Map();
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
@@ -55,7 +57,7 @@ export class MapService {
             wmtsLayer,
             new VectorLayer({
               source: vectorSource,
-              zIndex: 10
+              zIndex: 10,
             }),
           ],
           view: new View({
@@ -64,32 +66,33 @@ export class MapService {
             zoom: 9,
           }),
         });
+        this.testMap = olMap;
 
         const routesSource = this.createImageWMS(
           routesLayers,
           epsgProjection25832,
           layerURL,
-          'summary_id=0'
+          'summary_id>0'
         );
         this.routesSources2 = routesSource;
-        
+
         const wmsSource = this.createImageWMS(
           accidentPointLayers,
           epsgProjection25832,
           layerURL,
-          'id > 0'//'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
+          'id > 0' //'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
         );
         this.pointsSource = wmsSource;
 
-        this.addWMSToMap(olMap, wmsSource);
-        this.addWMSToMap(olMap, routesSource);
+        this.addWMSToMap(olMap, wmsSource, 'AP');
+        this.addWMSToMap(olMap, routesSource, 'routes');
 
         const squareAlvor = this.createImageWMS(
           'postgis:uag_alle_alvor',
           epsgProjection25832,
           layerURL,
           'id>0'
-        )
+        );
 
         //this.addWMSToMap(olMap, squareAlvor);
 
@@ -101,7 +104,7 @@ export class MapService {
     });
   }
 
-  public addWMSToMap(olMap: Map, imageWMS: ImageWMS) {
+  public addWMSToMap(olMap: Map, imageWMS: ImageWMS, key: string) {
     olMap
       .getView()
       .setCenter(
@@ -111,7 +114,13 @@ export class MapService {
           olMap.getView().getProjection()
         )
       );
-    olMap.addLayer(new ImageLayer({ source: imageWMS }));
+    const layer = new ImageLayer({ source: imageWMS });
+    this.idkMap.set(key, layer);
+    olMap.addLayer(layer);
+  }
+
+  public removeWMSToMap(olMap: Map, key: string) {
+    olMap.removeLayer(this.idkMap.get(key));
   }
 
   public createImageWMS(
@@ -123,13 +132,11 @@ export class MapService {
     const wmsSource = new ImageWMS({
       params: {
         LAYERS: layers,
-        CQL_FILTER: cql_filter
+        CQL_FILTER: cql_filter,
       },
       projection: projection,
       url: url,
     });
     return wmsSource;
   }
-
-  
 }
