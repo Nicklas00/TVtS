@@ -43,7 +43,7 @@ export class MapService {
       const routesLayers = 'postgis:routes_detail';
       const epsgProjection4326 = 'EPSG:4326';
       const epsgProjection25832 = 'EPSG:25832';
-      const layerURL = 'http://localhost:8080/geoserver/postgis/wms?';
+      const layerURL = 'http://localhost/geoserver/postgis/wms?';
 
       if (source) {
         const olMap = new Map({
@@ -66,6 +66,15 @@ export class MapService {
             zoom: 9,
           }),
         });
+        olMap
+        .getView()
+        .setCenter(
+          transform(
+            [588061, 6139595],
+            'EPSG:25832',
+            olMap.getView().getProjection()
+        )
+      );
         this.testMap = olMap;
 
         const routesSource = this.createImageWMS(
@@ -110,15 +119,6 @@ export class MapService {
     key: string,
     setZindex: number
   ) {
-    olMap
-      .getView()
-      .setCenter(
-        transform(
-          [588061, 6139595],
-          'EPSG:25832',
-          olMap.getView().getProjection()
-        )
-      );
     const layer = new ImageLayer({ source: imageWMS, zIndex: setZindex });
     this.idkMap.set(key, layer);
     olMap.addLayer(layer);
