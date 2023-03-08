@@ -90,7 +90,8 @@ export class MarkerService {
             //color: '#F44336',
             src: '../assets/dot-marker.png',
             imgSize: [40, 40],
-            anchor: [0.5, 1],
+            anchor: [0.5, 0.5],
+            scale: 0.5
           }),
         })
       );
