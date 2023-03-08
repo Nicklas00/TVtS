@@ -40,10 +40,10 @@ export class MapService {
       const source = wmtsLayer.getSource();
       const vectorSource = new VectorSource({});
       const accidentPointLayers = 'postgis:uag';
-      const routesLayers = 'postgis:routes';
+      const routesLayers = 'postgis:routes_detail';
       const epsgProjection4326 = 'EPSG:4326';
       const epsgProjection25832 = 'EPSG:25832';
-      const layerURL = 'http://localhost/geoserver/postgis/wms?';
+      const layerURL = 'http://localhost:8080/geoserver/postgis/wms?';
 
       if (source) {
         const olMap = new Map({
