@@ -89,18 +89,22 @@ export class MapService {
           accidentPointLayers,
           epsgProjection25832,
           layerURL,
-          'id > 0' //'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
+          "id > 0"
+          //'date > \'2018-01-01\' and date < \'2018-12-31\''
+          //'DWithin(geom,POINT(588061 6139595), 500, meters)' //'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
         );
         this.pointsSource = wmsSource;
 
         this.addWMSToMap(olMap, wmsSource, 'AP', 5);
         this.addWMSToMap(olMap, routesSource, 'routes', 9);
+        
 
         const squareAlvor = this.createImageWMS(
           'postgis:uag_alle_alvor',
           epsgProjection25832,
           layerURL,
-          'id>0'
+          'id > 0'
+          
         );
 
         //this.addWMSToMap(olMap, squareAlvor);
