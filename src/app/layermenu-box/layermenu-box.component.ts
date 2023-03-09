@@ -10,15 +10,9 @@ import { MapService } from '../map.service';
 export class LayermenuBoxComponent {
   constructor(private mapService: MapService) {}
 
-  
-  
-  
-
   searchLayer(date1: String, date2: String){
     console.log(date1, date2);
-    
     this.mapService.pointsSource?.updateParams({'CQL_FILTER': `date > '${date1}' and date < '${date2}'`});
-    //DO SOMETHING!!!!
   }
 
   enableLayer(isChecked: any) {
