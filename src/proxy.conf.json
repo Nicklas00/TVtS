@@ -1,6 +1,6 @@
 {
     "/postgis": {
-        "target": "http://localhost/geoserver",
+        "target": "http://localhost:8080/geoserver",
         "secure": true,
         "changeOrigin": true,
         "logLevel": "debug"
