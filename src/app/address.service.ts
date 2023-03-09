@@ -9,8 +9,8 @@ import { ReverseAddress } from './ReverseAddress';
   providedIn: 'root',
 })
 export class AddressService {
-  private autoCompleteURL = 'https://dawa.aws.dk/autocomplete?fuzzy=&q=%%query%%&startfra=adresse&per_side=6';
-  private reverseAddressURL = 'https://api.dataforsyningen.dk/adgangsadresser/reverse?x=%%x%%&y=%%y%%&srid=4326&struktur=mini';
+  private autoCompleteURL = '/autocomplete?fuzzy=&q=%%query%%&startfra=adresse&per_side=6';
+  private reverseAddressURL = '/adgangsadresser/reverse?x=%%x%%&y=%%y%%&srid=4326&struktur=mini';
   constructor(private http: HttpClient) {}
 
   getAddressAutocomplete(searchQuery: string): Observable<Address[]> {
