@@ -13,7 +13,7 @@ export class RoutesService {
   save(routeRequest: routeRequest): void {
     this.httpClient
       .post<routeRequest>(
-        'http://localhost:8082/api/generateRoute',
+        '/api/generateRoute',
         routeRequest
       )
       .subscribe({
