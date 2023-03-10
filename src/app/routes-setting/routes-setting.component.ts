@@ -17,7 +17,7 @@ export class RoutesSettingComponent {
   originAddresses: Address[] | undefined;
   destinationAddresses: Address[] | undefined;
 
-  mode: string = 'pedestrian';
+  mode: string = 'Fodgænger';
 
   constructor(
     private routesService: RoutesService,
@@ -32,9 +32,15 @@ export class RoutesSettingComponent {
     });
   }
   route() {
+    let modeEn = '';
+    if(this.mode === 'Fodgænger') {
+      modeEn = 'pedestrian';
+    } else {
+      modeEn = 'bicycle';
+    }
     const routeRequest = {
       id: 0,
-      mode: this.mode,
+      mode: modeEn,
       origin: {
         lat: this.destAddress!.data.y,
         lon: this.destAddress!.data.x,
@@ -116,10 +122,10 @@ export class RoutesSettingComponent {
   }
 
   changeMode() {
-    if (this.mode === 'pedestrian') {
-      this.mode = 'bicycle';
+    if (this.mode === 'Fodgænger') {
+      this.mode = 'Cykel';
     } else {
-      this.mode = 'pedestrian';
+      this.mode = 'Fodgænger';
     }
   }
 }
