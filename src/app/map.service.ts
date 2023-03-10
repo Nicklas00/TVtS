@@ -6,7 +6,7 @@ import { createWmtsLayer } from '../openlayers-tools/wmts-builder';
 import { defaults } from 'ol/interaction';
 import { Feature, Image, Map, View } from 'ol';
 import { fromLonLat, transform } from 'ol/proj';
-import { ImageWMS } from 'ol/source';
+import { ImageWMS, Source } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
 import {
   mouseCoordinateConverter,
@@ -25,6 +25,7 @@ export class MapService {
   markerSource: VectorSource | undefined;
   routesSources2: ImageWMS = new ImageWMS();
   pointsSource: ImageWMS | undefined;
+  routeVectorSource = new VectorSource();
   testMap: Map = new Map();
   idkMap = new Map();
   constructor() {
@@ -60,6 +61,10 @@ export class MapService {
               source: vectorSource,
               zIndex: 10,
             }),
+            new VectorLayer({
+              source: this.routeVectorSource,
+              zIndex: 11,
+            })
           ],
           view: new View({
             projection: source.getProjection()!,
@@ -85,6 +90,8 @@ export class MapService {
           'summary_id=0'
         );
         this.routesSources2 = routesSource;
+      
+        this.featureEvents.setSource(routesSource, 'postgis:routes_detail').setMouseEvents(this.mouseEvents);
 
         const wmsSource = this.createImageWMS(
           accidentPointLayers,
