@@ -12,10 +12,10 @@
 <button (click)="switchAddresses()">v^</button>
 <br>
 
-<img src="/assets/map-marker-black.png" alt="red" class="marker-img"><input type="text" value="{{getDestinationText()}}" (keyup)="searchOrigin($event)">
+<img src="/assets/map-marker-black.png" alt="red" class="marker-img"><input type="text" value="{{getDestinationText()}}" (keyup)="searchDestination($event)">
 <div *ngIf="destinationAddresses !== undefined">
     <button (click)="clearDestinationSearch()">x</button>
-    <li *ngFor="let address of originAddresses">
+    <li *ngFor="let address of destinationAddresses">
         <span (click)="selectDestinationAddress(address)">{{address.forslagstekst}}</span>
     </li>
 </div>
