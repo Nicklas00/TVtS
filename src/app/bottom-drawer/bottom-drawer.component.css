@@ -1,0 +1,11 @@
+#info-box {
+    position: absolute;
+    bottom: 10px;
+    left: 2%;
+    width: 96%;
+    max-width: 400px;
+    height: 150px;
+    z-index: 1001;
+    background-color: whitesmoke;
+    overflow: auto;
+  }
