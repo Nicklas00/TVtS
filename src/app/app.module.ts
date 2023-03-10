@@ -9,6 +9,7 @@ import { RoutesSettingComponent } from './routes-setting/routes-setting.componen
 import { HttpClientModule } from '@angular/common/http';
 import { LayermenuBoxComponent } from './layermenu-box/layermenu-box.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BottomDrawerComponent } from './bottom-drawer/bottom-drawer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     SearchComponent,
     RoutesSettingComponent,
     LayermenuBoxComponent,
+    BottomDrawerComponent,
   ],
   imports: [BrowserModule, HttpClientModule, NoopAnimationsModule],
   providers: [],
