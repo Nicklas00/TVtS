@@ -12,6 +12,10 @@ export class LayermenuBoxComponent {
 
   filterBy(value: string){
     switch(value){
+      case "0":{
+        this.mapService.pointsSource?.updateParams({'CQL_FILTER': 'id > 0'})
+        break;
+      }
       case "1":{
       this.mapService.pointsSource?.updateParams({'CQL_FILTER': `seriousness_id = '1'`});
       break;
@@ -42,7 +46,9 @@ export class LayermenuBoxComponent {
 
   searchByDate(date1: String, date2: String){
     console.log(date1, date2);
-    this.mapService.pointsSource?.updateParams({'CQL_FILTER': `date > '${date1}' and date < '${date2}'`});
+    this.mapService.pointsSource?.updateParams({'CQL_FILTER': `date >= '${date1 + '-01'}' and date <= '${date2+'-01'}'`});
+    console.log(`date > '${date1}-01' and date < '${date2}-01'`);
+    
   }
 
   enableLayer(isChecked: any) {

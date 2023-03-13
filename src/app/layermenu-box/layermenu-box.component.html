@@ -4,17 +4,17 @@
   <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
   <br>
   <br>
-    Search by interval
+    Search by month
     <br>
-  <input #date1 type="date" name="date1" id="date1">
+  <input #date1 type="month" name="date1" id="date1">
   ->
-  <input #date2 type="date" name="date2" id="date2">
+  <input #date2 type="month" name="date2" id="date2">
   <button (click)="searchByDate(date1.value, date2.value)">søg</button>
   <br>
   filter data
   <br>
   <select  #value name="seriousness" (change)="filterBy(value.value)">
-    <option value="" disabled selected hidden>Filtrer efter</option>
+    <option value="0" selected >Alle</option>
     <optgroup #label label="Grad af ulykke" id="GaU" value="1">
       <option value="1">Mindre alvorlig ulykker</option>
       <option value="2">Alvorlig ulykker</option>
