@@ -10,7 +10,37 @@ import { MapService } from '../map.service';
 export class LayermenuBoxComponent {
   constructor(private mapService: MapService) {}
 
-  searchLayer(date1: String, date2: String){
+  filterBy(value: string){
+    switch(value){
+      case "1":{
+      this.mapService.pointsSource?.updateParams({'CQL_FILTER': `seriousness_id = '1'`});
+      break;
+      }
+      case "2":{
+        this.mapService.pointsSource?.updateParams({'CQL_FILTER': `seriousness_id = '2'`});
+        break;
+      }
+      case "3":{
+        this.mapService.pointsSource?.updateParams({'CQL_FILTER': `day_type_id = '1'`});
+        break;
+      }
+      case "4":{
+        this.mapService.pointsSource?.updateParams({'CQL_FILTER': `day_type_id = '2'`});
+        break;
+      }
+      case "5":{
+        this.mapService.pointsSource?.updateParams({'CQL_FILTER': `traffic_type_id = '1'`});
+        break;
+      }
+      case "6":{
+        this.mapService.pointsSource?.updateParams({'CQL_FILTER': `traffic_type_id = '2'`});
+        break;
+      }
+    } 
+    console.log("value: " + value);
+  }
+
+  searchByDate(date1: String, date2: String){
     console.log(date1, date2);
     this.mapService.pointsSource?.updateParams({'CQL_FILTER': `date > '${date1}' and date < '${date2}'`});
   }
