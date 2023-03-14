@@ -1,0 +1,8 @@
+<div id="info-box">
+    <li *ngFor="let feature of featuresList">
+        <span>Rute: {{feature.get("category")}}</span>
+        <p>Længde: {{feature.get("length")}}m</p>
+        <p>Forventet rejse tid: {{feature.get("duration")}}s</p>
+        <p>Transportmiddel: {{feature.get("mode")}}</p>
+    </li>
+</div>
