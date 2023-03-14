@@ -4,20 +4,16 @@ import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 import { createWmtsLayer } from '../openlayers-tools/wmts-builder';
 import { defaults } from 'ol/interaction';
-import { Feature, Image, Map, View } from 'ol';
-import { fromLonLat, transform } from 'ol/proj';
-import { ImageWMS, Source } from 'ol/source';
+import { Map, View } from 'ol';
+import { transform } from 'ol/proj';
+import { ImageWMS } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
 import {
-  mouseCoordinateConverter,
   MouseEvents,
 } from '../openlayers-tools/mouse-events';
-import { map } from 'rxjs/internal/operators/map';
 import { FeatureEvents } from '../openlayers-tools/feature-events';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Icon, Style } from 'ol/style';
-import Point from 'ol/geom/Point';
 
 @Injectable({ providedIn: 'root' })
 export class MapService {
@@ -42,9 +38,7 @@ export class MapService {
       const vectorSource = new VectorSource({});
       const accidentPointLayers = 'postgis:uag';
       const routesLayers = 'postgis:routes_detail';
-      const epsgProjection4326 = 'EPSG:4326';
       const epsgProjection25832 = 'EPSG:25832';
-      //const layerURL = 'http://localhost/geoserver/postgis/wms?';
       const layerURL = '/postgis/wms?';
 
       if (source) {
@@ -98,24 +92,11 @@ export class MapService {
           epsgProjection25832,
           layerURL,
           "id > 0"
-          //'date > \'2018-01-01\' and date < \'2018-12-31\''
-          //'DWithin(geom,POINT(588061 6139595), 500, meters)' //'INTERSECTS(buffer(POINT(10.39033 55.39470), 100)'
         );
         this.pointsSource = wmsSource;
 
         this.addWMSToMap(olMap, wmsSource, 'AP', 5);
         this.addWMSToMap(olMap, routesSource, 'routes', 9);
-        
-
-        const squareAlvor = this.createImageWMS(
-          'postgis:uag_alle_alvor',
-          epsgProjection25832,
-          layerURL,
-          'id > 0'
-          
-        );
-
-        //this.addWMSToMap(olMap, squareAlvor);
 
         this.markerSource = vectorSource;
 
