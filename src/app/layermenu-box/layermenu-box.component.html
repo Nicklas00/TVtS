@@ -1,6 +1,8 @@
 <div id="layer-menu-box">
   <input type="checkbox" (click)="enableLayer($event)" checked />
   Enable Layer
+  <button (click)="filterControl(value.value, time.value, date1.value, date2.value)">Søg alle</button>
+  
   <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
   <br>
   <br>
@@ -12,8 +14,29 @@
   <button (click)="searchByDate(date1.value, date2.value)">søg</button>
   <br>
   filter data
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+
+  Select by time of day
   <br>
-  <select  #value name="seriousness" (change)="filterBy(value.value)">
+  <select  #value name="filterBy" (change)="filterBy(value.value)">
     <option value="0" selected >Alle</option>
     <optgroup #label label="Grad af ulykke" id="GaU" value="1">
       <option value="1">Mindre alvorlig ulykker</option>
@@ -27,6 +50,21 @@
       <option value="5">Blød trafikant</option>
       <option value="6">Motorkøretøj</option>
   </optgroup>
-
   </select>
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  <select #time name="filterByClock" (change)="searchByTime(time.value)">
+    <option value="0">Alle tidspunkter</option>
+    <option value="1">00.00-05.59</option>
+    <option value="2">06.00-08.59</option>
+    <option value="3">09.00-11.59</option>
+    <option value="4">12.00-15.59</option>
+    <option value="5">16.00-18.59</option>
+    <option value="6">19.00-21.59</option>
+    <option value="7">22.00-23.59</option>
+  </select>
+
 </div>
