@@ -11,38 +11,17 @@ export class LayermenuBoxComponent {
   constructor(private mapService: MapService) {}
 
   filterControl(type:string, clock:string, month1:string, month2:string){
+    const CQLarr : string[] = [];
+
     let CQLTime = this.searchByTime(clock);
-    let CQLType = this.filterBy(type);
+    let CQLType = this.searchByType(type);
     let CQLDate = this.searchByDate(month1, month2);
 
-    console.log("time: " + CQLTime + "\nType: " + CQLType + "\nDate: " + CQLDate);
-    console.log(CQLType + ' and ' + CQLTime + ' and ' + CQLDate);
+    !CQLTime ? {} : CQLarr.push(CQLTime);
+    !CQLDate ? {} : CQLarr.push(CQLDate);
+    !CQLType ? {} : CQLarr.push(CQLType);
 
-    if(CQLTime && CQLDate && CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLType + ' and ' + CQLTime + ' and ' + CQLDate});
-      console.log("jeg er i if 1: " + CQLType + ' and ' + CQLTime + ' and ' + CQLDate);
-    }else if(CQLTime && !CQLDate && CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLType + ' and ' + CQLTime});
-      console.log("jeg er i if 2: " + CQLType + ' and ' + CQLTime);
-    }else if(!CQLTime && CQLDate && CQLType ){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLType + ' and ' + CQLDate});
-      console.log("jeg er i if 3: " + CQLType + ' and ' + CQLDate);
-    }else if(CQLTime && CQLDate && !CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLTime + ' and ' + CQLDate});
-      console.log("jeg er i if 4: " + CQLTime + ' and ' + CQLDate);     
-    }else if(!CQLTime && CQLDate && !CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLDate});
-      console.log("jeg er i if 5: " + CQLDate);
-    }else if(CQLTime && !CQLDate && !CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLTime});
-      console.log("jeg er i if 6: " + CQLTime);
-    }else if(!CQLTime && !CQLDate && CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLType});
-      console.log("jeg er i if 7: " + CQLType);
-    }else if(!CQLTime && !CQLDate && !CQLType){
-      this.mapService.pointsSource?.updateParams({'CQL_FILTER': 'id > 0'});
-      console.log("jeg er i if 8: ");
-    }
+    this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLarr.join(' and ')});
   }
 
   searchByTime(value:string) : string | undefined{
@@ -53,7 +32,7 @@ export class LayermenuBoxComponent {
     }
   }
 
-  filterBy(value: string | undefined){
+  searchByType(value: string | undefined){
     switch(value){
       case "0":{
         return undefined;
@@ -92,7 +71,7 @@ export class LayermenuBoxComponent {
     if(!date1 || !date2){
       return undefined;
     }else{
-    return `date >= '${date1 + '-01'}' and date <= '${date2+'-01'}'`;
+      return `date >= '${date1 + '-01'}' and date <= '${date2+'-01'}'`;
     }
 
     
