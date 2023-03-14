@@ -6,9 +6,9 @@
   <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
     Søg efter måned
     <br>
-  <input #date1 type="month" name="date1" id="date1" min="2017-01" max="2022-12" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
+  <input #date1 type="month" name="date1" id="date1" min="2017-01" max="2022-12" (change)="filterControl(type.value, time.value, date1.value, date2.value)">
   ->
-  <input #date2 type="month" name="date2" id="date2" min="2017-01" max="2022-12" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
+  <input #date2 type="month" name="date2" id="date2" min="2017-01" max="2022-12" (change)="filterControl(type.value, time.value, date1.value, date2.value)">
   <br>
   Ulykketype
   &nbsp;
@@ -33,7 +33,7 @@
 
   Søg efter tidspunkt
   <br>
-  <select  #value name="filterBy" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
+  <select  #type name="filterBy" (change)="filterControl(type.value, time.value, date1.value, date2.value)">
     <option value="0" selected >Alle</option>
     <optgroup #label label="Grad af ulykke" value="1">
       <option value="1">Mindre alvorlig ulykker</option>
@@ -53,7 +53,7 @@
   &nbsp;
   &nbsp;
   &nbsp;
-  <select #time name="filterByClock" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
+  <select #time name="filterByClock" (change)="filterControl(type.value, time.value, date1.value, date2.value)">
     <option value="0">Alle tidspunkter</option>
     <option value="1">00.00-05.59</option>
     <option value="2">06.00-08.59</option>
