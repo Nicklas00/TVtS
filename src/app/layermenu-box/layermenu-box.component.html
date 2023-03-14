@@ -5,16 +5,8 @@
     (click)="enableLayer($event)"
     checked
   >
-    Lag tilføjet
+    Lag Aktiveret
   </mat-checkbox>
-
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="filterControl(value.value, time.value, date1.value, date2.value)"
-  >
-    Søg alle
-  </button>
 
   <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
   <br />
@@ -73,4 +65,11 @@
       <mat-option value="7">22.00-23.59</mat-option>
     </mat-select>
   </mat-form-field>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="filterControl(value.value, time.value, date1.value, date2.value)"
+  >
+    Søg alle
+  </button>
 </div>
