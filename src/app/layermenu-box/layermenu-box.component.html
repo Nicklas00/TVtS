@@ -1,19 +1,16 @@
 <div id="layer-menu-box">
+  <h4>Filtrer data</h4>
   <input type="checkbox" (click)="enableLayer($event)" checked />
-  Enable Layer
-  <button (click)="filterControl(value.value, time.value, date1.value, date2.value)">Søg alle</button>
-  
+  Aktiver lag
+  <br>
   <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
-  <br>
-  <br>
-    Search by month
+    Søg efter måned
     <br>
-  <input #date1 type="month" name="date1" id="date1">
+  <input #date1 type="month" name="date1" id="date1" min="2017-01" max="2022-12" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
   ->
-  <input #date2 type="month" name="date2" id="date2">
-  <button (click)="searchByDate(date1.value, date2.value)">søg</button>
+  <input #date2 type="month" name="date2" id="date2" min="2017-01" max="2022-12" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
   <br>
-  filter data
+  Ulykketype
   &nbsp;
   &nbsp;
   &nbsp;
@@ -34,19 +31,19 @@
   &nbsp;
   &nbsp;
 
-  Select by time of day
+  Søg efter tidspunkt
   <br>
-  <select  #value name="filterBy" (change)="filterBy(value.value)">
+  <select  #value name="filterBy" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
     <option value="0" selected >Alle</option>
-    <optgroup #label label="Grad af ulykke" id="GaU" value="1">
+    <optgroup #label label="Grad af ulykke" value="1">
       <option value="1">Mindre alvorlig ulykker</option>
       <option value="2">Alvorlig ulykker</option>
     </optgroup>
-    <optgroup  label="Hverdag/Weekend" value="2" id="HW">
+    <optgroup  label="Hverdag/Weekend" value="2">
         <option value="3">Hverdag</option>
         <option value="4">Weekend</option>
     </optgroup>
-    <optgroup  label="Ulykke type" id="UT" value="3">
+    <optgroup  label="Ulykke type" value="3">
       <option value="5">Blød trafikant</option>
       <option value="6">Motorkøretøj</option>
   </optgroup>
@@ -56,7 +53,7 @@
   &nbsp;
   &nbsp;
   &nbsp;
-  <select #time name="filterByClock" (change)="searchByTime(time.value)">
+  <select #time name="filterByClock" (change)="filterControl(value.value, time.value, date1.value, date2.value)">
     <option value="0">Alle tidspunkter</option>
     <option value="1">00.00-05.59</option>
     <option value="2">06.00-08.59</option>
