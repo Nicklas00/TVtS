@@ -1,5 +1,12 @@
 <div id="info-box">
-    <app-search *ngIf="originAddress===undefined && destinationAddress===undefined"></app-search>
-    <app-routes-setting [destAddress]="destinationAddress!" [originAddress]="originAddress!" *ngIf="originAddress!==undefined || destinationAddress!==undefined"></app-routes-setting>
-    <br><button (click)="nextLayer()">Next</button><span> {{layerName}}</span>
+  <app-search
+    *ngIf="originAddress === undefined && destinationAddress === undefined"
+  ></app-search>
+  <app-routes-setting
+    [destAddress]="destinationAddress!"
+    [originAddress]="originAddress!"
+    *ngIf="originAddress !== undefined || destinationAddress !== undefined"
+  ></app-routes-setting>
+  <br /><button mat-raised-button (click)="nextLayer()">Next</button
+  ><span> {{ layerName }}</span>
 </div>

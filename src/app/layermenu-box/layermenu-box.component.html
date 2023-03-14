@@ -1,70 +1,76 @@
 <div id="layer-menu-box">
-  <input type="checkbox" (click)="enableLayer($event)" checked />
-  Enable Layer
-  <button (click)="filterControl(value.value, time.value, date1.value, date2.value)">Søg alle</button>
-  
+  <mat-checkbox
+    color="primary"
+    type="checkbox"
+    (click)="enableLayer($event)"
+    checked
+  >
+    Lag tilføjet
+  </mat-checkbox>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="filterControl(value.value, time.value, date1.value, date2.value)"
+  >
+    Søg alle
+  </button>
+
   <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
-  <br>
-  <br>
-    Search by month
-    <br>
-  <input #date1 type="month" name="date1" id="date1">
-  ->
-  <input #date2 type="month" name="date2" id="date2">
-  <button (click)="searchByDate(date1.value, date2.value)">søg</button>
-  <br>
-  filter data
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
+  <br />
+  <br />
+  Søg på måned
+  <br />
 
-  Select by time of day
-  <br>
-  <select  #value name="filterBy" (change)="filterBy(value.value)">
-    <option value="0" selected >Alle</option>
-    <optgroup #label label="Grad af ulykke" id="GaU" value="1">
-      <option value="1">Mindre alvorlig ulykker</option>
-      <option value="2">Alvorlig ulykker</option>
-    </optgroup>
-    <optgroup  label="Hverdag/Weekend" value="2" id="HW">
-        <option value="3">Hverdag</option>
-        <option value="4">Weekend</option>
-    </optgroup>
-    <optgroup  label="Ulykke type" id="UT" value="3">
-      <option value="5">Blød trafikant</option>
-      <option value="6">Motorkøretøj</option>
-  </optgroup>
-  </select>
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  <select #time name="filterByClock" (change)="searchByTime(time.value)">
-    <option value="0">Alle tidspunkter</option>
-    <option value="1">00.00-05.59</option>
-    <option value="2">06.00-08.59</option>
-    <option value="3">09.00-11.59</option>
-    <option value="4">12.00-15.59</option>
-    <option value="5">16.00-18.59</option>
-    <option value="6">19.00-21.59</option>
-    <option value="7">22.00-23.59</option>
-  </select>
+  <input #date1 type="month" name="date1" id="date1" />
+  <input #date2 type="month" name="date2" id="date2" />
 
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="searchByDate(date1.value, date2.value)"
+  >
+    Søg
+  </button>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrer Data</mat-label>
+    <mat-select
+      #value
+      name="filterBy"
+      (selectionChange)="filterBy(value.value)"
+    >
+      <mat-option value="0" selected>Alle</mat-option>
+      <mat-optgroup #label label="Grad af ulykke" id="GaU" value="1">
+        <mat-option value="1">Mindre alvorlig ulykker</mat-option>
+        <mat-option value="2">Alvorlig ulykker</mat-option>
+      </mat-optgroup>
+      <mat-optgroup label="Hverdag/Weekend" value="2" id="HW">
+        <mat-option value="3">Hverdag</mat-option>
+        <mat-option value="4">Weekend</mat-option>
+      </mat-optgroup>
+      <mat-optgroup label="Ulykke type" id="UT" value="3">
+        <mat-option value="5">Blød trafikant</mat-option>
+        <mat-option value="6">Motorkøretøj</mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </mat-form-field>
+  &nbsp;
+  <mat-form-field appearance="fill">
+    <mat-label>Søg på tid</mat-label>
+    <mat-select
+      #time
+      name="filterByClock"
+      (selectionChange)="searchByTime(time.value)"
+    >
+      <mat-option value="0">Alle tidspunkter</mat-option>
+      <mat-option value="1">00.00-05.59</mat-option>
+      <mat-option value="2">06.00-08.59</mat-option>
+      <mat-option value="3">09.00-11.59</mat-option>
+      <mat-option value="4">12.00-15.59</mat-option>
+      <mat-option value="5">16.00-18.59</mat-option>
+      <mat-option value="6">19.00-21.59</mat-option>
+      <mat-option value="7">22.00-23.59</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>

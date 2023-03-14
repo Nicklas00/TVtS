@@ -10,6 +10,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayermenuBoxComponent } from './layermenu-box/layermenu-box.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BottomDrawerComponent } from './bottom-drawer/bottom-drawer.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -21,7 +25,15 @@ import { BottomDrawerComponent } from './bottom-drawer/bottom-drawer.component';
     LayermenuBoxComponent,
     BottomDrawerComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, NoopAnimationsModule],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    NoopAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
