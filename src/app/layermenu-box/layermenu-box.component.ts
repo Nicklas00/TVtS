@@ -10,16 +10,41 @@ import { MapService } from '../map.service';
 export class LayermenuBoxComponent {
   constructor(private mapService: MapService) {}
 
-  filterControl(type:string, clock:string, month1:string, month2:string){
+  layerSelect(value:string){
+    switch(value){
+      case "0":{
+        this.mapService.pointsSource?.updateParams({'STYLES': 'postgis:heatmap'})
+        break;
+      }
+      case "1":{
+        this.mapService.pointsSource?.updateParams({'STYLES': 'postgis:heatmap_alt_color'})
+        break;
+      }
+      case "2":{
+        this.mapService.pointsSource?.updateParams({'STYLES': 'postgis:heatmap_weighted'})
+        break;
+      }
+      case "3":{
+        this.mapService.pointsSource?.updateParams({'STYLES': 'postgis:heatmap_radius'})
+        break;
+      }
+    }
+  }
+
+  filterControl(type:string, clock:string, month1:string, month2:string, day:string, serious:string){
     const CQLarr : string[] = [];
 
     let CQLTime = this.searchByTime(clock);
     let CQLType = this.searchByType(type);
     let CQLDate = this.searchByDate(month1, month2);
+    let CQLDay = this.searchByDay(day);
+    let CQLSeriousness = this.searchBySeriouseness(serious);
 
     !CQLTime ? {} : CQLarr.push(CQLTime);
     !CQLDate ? {} : CQLarr.push(CQLDate);
     !CQLType ? {} : CQLarr.push(CQLType);
+    !CQLDay ? {} : CQLarr.push(CQLDay);
+    !CQLSeriousness ? {} : CQLarr.push(CQLSeriousness);
 
     this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLarr.join(' and ')});
   }
@@ -29,6 +54,30 @@ export class LayermenuBoxComponent {
       return undefined;
     }else{
       return `time_interval_id = '${value}'`;
+    }
+  }
+
+  searchBySeriouseness(value:string | undefined){
+    if(value == '0'){
+      return undefined;
+    }else{
+      return `seriousness_id = '${value}'`;
+    }
+  }
+
+  searchByDay(value:string | undefined){
+    if(value == '0'){
+      return undefined;
+    }else{
+      return `day_type_id = '${value}'`;
+    }
+  }
+
+  searchByTrafficType(value:string | undefined){
+    if(value == '0'){
+      return undefined;
+    }else{
+      return `traffic_type_id = '${value}'`;
     }
   }
 
@@ -64,7 +113,6 @@ export class LayermenuBoxComponent {
       }
     } 
     return undefined;
-    console.log("value: " + value);
   }
 
   searchByDate(date1: String, date2: String):string | undefined{    
