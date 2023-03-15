@@ -17,19 +17,9 @@ export class TopBarComponent {
     private controlService: ControlService,
     private markerService: MarkerService
   ) {
-    controlService.destination.asObservable().subscribe((address) => {
-      if (controlService.destEmptyState === false) {
-        this.destinationAddress = address;
-      } else {
-        this.destinationAddress = undefined;
-      }
-    });
-    controlService.origin.asObservable().subscribe((address) => {
-      if (controlService.originEmptyState === false) {
-        this.originAddress = address;
-      } else {
-        this.originAddress = undefined;
-      }
+    controlService.routeObject.asObservable().subscribe((route) => {
+      this.destinationAddress = route.destination;
+      this.originAddress = route.origin;
     });
   }
 }
