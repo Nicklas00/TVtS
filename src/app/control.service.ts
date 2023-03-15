@@ -9,9 +9,11 @@ import { Route } from './Route';
 })
 export class ControlService {
   public routeObject: BehaviorSubject<Route> = new BehaviorSubject<Route>({
+    id: undefined,
     destination: undefined,
     origin: undefined,
-    mode: 'pedestrian'
+    mode: 'pedestrian',
+    features: [],
   });
 
   constructor(private addressService: AddressService) {
