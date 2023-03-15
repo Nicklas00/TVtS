@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Geometry } from 'ol/geom';
 import { RoutesService } from '../routes.service';
 import Feature from 'ol/Feature';
+import { ControlService } from '../control.service';
 
 @Component({
   selector: 'app-bottom-drawer',
@@ -11,9 +12,9 @@ import Feature from 'ol/Feature';
 export class BottomDrawerComponent {
 
   featuresList: Feature<Geometry>[] = [];
-  constructor(private routesService: RoutesService) {
-    routesService.selectedFeatures.asObservable().subscribe(features => {
-      this.featuresList = features;
+  constructor(private routesService: RoutesService, public controlService: ControlService) {
+    controlService.routeObject.asObservable().subscribe(route => {
+      this.featuresList = route.features;
     })
   }
 }
