@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LayermenuBoxComponent } from './layermenu-box/layermenu-box.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { BottomDrawerComponent } from './bottom-drawer/bottom-drawer.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,7 @@ import { BottomDrawerComponent } from './bottom-drawer/bottom-drawer.component';
     LayermenuBoxComponent,
     BottomDrawerComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, NoopAnimationsModule],
+  imports: [BrowserModule, HttpClientModule, NoopAnimationsModule, ReactiveFormsModule, MatAutocompleteModule],
   providers: [],
   bootstrap: [AppComponent],
 })
