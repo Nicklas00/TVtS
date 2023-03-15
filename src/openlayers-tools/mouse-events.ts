@@ -6,8 +6,7 @@ import { get, getTransform, ProjectionLike, TransformFunction } from 'ol/proj';
 import { Coordinate } from 'ol/coordinate';
 import Projection from 'ol/proj/Projection';
 /**
- * This converts the OpenLayers mouse events to Observables, making
-them easily accessible/mappable in a Reactive style.
+ * This converts the OpenLayers mouse events to Observables, making them easily accessible/mappable in a Reactive style.
  */
 export class MouseEvents {
   private readonly clicksSubject = new Subject<MapBrowserEvent<MouseEvent>>();
@@ -24,14 +23,12 @@ export class MouseEvents {
   readonly clicks: Observable<MapBrowserEvent<MouseEvent>> =
     this.clicksSubject.asObservable();
   /**
- * An Observable of MapBrowserEvent representing mouse moves,
-emitting `undefined` when the cursor passes outside the map.
+ * An Observable of MapBrowserEvent representing mouse moves, emitting `undefined` when the cursor passes outside the map.
  */
   readonly moves: Observable<MapBrowserEvent<MouseEvent> | undefined> =
     this.movesSubject.asObservable();
   /**
- * Registers a given map to provide the events. Registering a new map
-will automatically de-register the previous.
+ * Registers a given map to provide the events. Registering a new map will automatically de-register the previous.
  */
   setMap(map: Map): this {
     // De-register existing click- and move listeners...
@@ -78,8 +75,7 @@ will automatically de-register the previous.
   }
 }
 /**
- * Creates a function which maps the coordinates in a MapBrowserEvent
-to coordinates in a given CRS, automatically
+ * Creates a function which maps the coordinates in a MapBrowserEvent to coordinates in a given CRS, automatically
  * taking into account with the map view's CRS is.
  *
  * @example
@@ -88,8 +84,7 @@ to coordinates in a given CRS, automatically
  * map(mouseCoordinateConverter('epsg:25832'))
  * )
  *
- * If the event can be undefined (such as when using the {@link
-MouseEvents.moves}), wrap the function in a null-safe
+ * If the event can be undefined (such as when using the {@link MouseEvents.moves}), wrap the function in a null-safe
  * wrapper, e.g. using Ginnungagap:
  *
  * @example
