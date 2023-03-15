@@ -8,9 +8,7 @@ import { Map, View } from 'ol';
 import { transform } from 'ol/proj';
 import { ImageWMS } from 'ol/source';
 import ImageLayer from 'ol/layer/Image';
-import {
-  MouseEvents,
-} from '../openlayers-tools/mouse-events';
+import { MouseEvents } from '../openlayers-tools/mouse-events';
 import { FeatureEvents } from '../openlayers-tools/feature-events';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -67,14 +65,14 @@ export class MapService {
           }),
         });
         olMap
-        .getView()
-        .setCenter(
-          transform(
-            [588061, 6139595],
-            'EPSG:25832',
-            olMap.getView().getProjection()
-        )
-      );
+          .getView()
+          .setCenter(
+            transform(
+              [588061, 6139595],
+              'EPSG:25832',
+              olMap.getView().getProjection()
+            )
+          );
         this.testMap = olMap;
 
         const routesSource = this.createImageWMS(
@@ -84,14 +82,16 @@ export class MapService {
           'summary_id=0'
         );
         this.routesSources2 = routesSource;
-      
-        this.featureEvents.setSource(routesSource, 'postgis:routes_detail').setMouseEvents(this.mouseEvents);
+
+        this.featureEvents
+          .setSource(routesSource, 'postgis:routes_detail')
+          .setMouseEvents(this.mouseEvents);
 
         const wmsSource = this.createImageWMS(
           accidentPointLayers,
           epsgProjection25832,
           layerURL,
-          "id > 0"
+          'id > 0'
         );
         this.pointsSource = wmsSource;
 
