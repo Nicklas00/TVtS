@@ -7,60 +7,39 @@ import Point from 'ol/geom/Point';
 import { Feature } from 'ol';
 import { fromLonLat } from 'ol/proj';
 import { ControlService } from './control.service';
+import { Address } from './Address';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MarkerService {
-  public destinationCoordinates: Coordinate = [0, 0];
-  public originCoordinates: Coordinate = [0, 0];
-  public originEmptyState: Boolean = false;
-  public destEmptyState: Boolean = false;
-
   constructor(
     private mapService: MapService,
     private controlService: ControlService
   ) {
-    controlService.destination.asObservable().subscribe((address) => {
-      this.destinationCoordinates = [address.data.x, address.data.y];
-      this.setEmptyState(
-        [address.data.x, address.data.y], 
-        this.destEmptyState
+    controlService.routeObject.asObservable().subscribe((route) => {
+      this.setMarkers(
+        mapService.markerSource!,
+        route.destination,
+        route.origin
       );
-      this.setMarkers(mapService.markerSource!);
-    });
-
-    controlService.origin.asObservable().subscribe((address) => {
-      this.originCoordinates = [address.data.x, address.data.y];
-      this.setEmptyState(
-        [address.data.x, address.data.y],
-        this.originEmptyState
-      );
-      this.setMarkers(mapService.markerSource!);
     });
   }
 
-  setEmptyState(coords: Coordinate, stateBool: Boolean) {
-    if (coords[0] === 0 && coords[1] === 0) {
-      stateBool = true;
-    } else {
-      stateBool = false;
-    }
-  }
-
-  public setMarkers(vectorSource: VectorSource) {
-    if(vectorSource === undefined) {
+  private setMarkers(
+    vectorSource: VectorSource,
+    destination: Address | undefined,
+    origin: Address | undefined
+  ) {
+    if (vectorSource === undefined) {
       return;
     }
     vectorSource.clear();
 
-    if (this.destEmptyState === false) {
+    if (destination) {
       const destMarker = new Feature({
         geometry: new Point(
-          fromLonLat([
-            this.destinationCoordinates[0],
-            this.destinationCoordinates[1],
-          ])
+          fromLonLat([destination.data.x, destination.data.y])
         ),
       });
 
@@ -77,11 +56,9 @@ export class MarkerService {
       vectorSource.addFeature(destMarker);
     }
 
-    if (this.originEmptyState === false) {
+    if (origin) {
       const destMarker = new Feature({
-        geometry: new Point(
-          fromLonLat([this.originCoordinates[0], this.originCoordinates[1]])
-        ),
+        geometry: new Point(fromLonLat([origin.data.x, origin.data.y])),
       });
 
       destMarker.setStyle(
@@ -91,7 +68,7 @@ export class MarkerService {
             src: '../assets/dot-marker.png',
             imgSize: [40, 40],
             anchor: [0.5, 0.5],
-            scale: 0.5
+            scale: 0.5,
           }),
         })
       );
