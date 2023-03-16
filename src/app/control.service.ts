@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Address } from './Address';
 import { AddressService } from './address.service';
+import { MapService } from './map.service';
 import { Route } from './Route';
 
 @Injectable({
@@ -16,9 +17,18 @@ export class ControlService {
     features: [],
   });
 
-  constructor(private addressService: AddressService) {
+  constructor(
+    private addressService: AddressService,
+    private mapService: MapService
+  ) {
     addressService.address.subscribe((address: Address) => {
       this.newAddress(address);
+    });
+
+    mapService.featureEvents.features.subscribe((features: any) => {
+      const route = this.routeObject.getValue();
+      route.features = features;
+      this.routeObject.next(route);
     });
   }
 
