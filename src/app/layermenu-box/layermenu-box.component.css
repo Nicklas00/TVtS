@@ -5,7 +5,21 @@
     width: 96%;
     max-width: 400px;
     height: 150px;
-    z-index: 1001;
+    z-index: 2;
     background-color: whitesmoke;
     overflow: auto;
 }
+
+mat-form-field {
+    width: 40%;
+    height: 40%;
+}
+
+mat-label {
+  font-size: 12px;
+}
+
+mat-option {
+  font-size: 12px;
+}
+

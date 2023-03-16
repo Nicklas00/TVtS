@@ -1,91 +1,163 @@
 <div id="layer-menu-box">
   <h4>Filtrer data</h4>
-  <input type="checkbox" (click)="enableLayer($event)" checked />
-  Aktiver lag
-  <b> &nbsp;   |  &nbsp;  </b> 
+  <mat-checkbox
+    color="primary"
+    type="checkbox"
+    (click)="enableLayer($event)"
+    checked
+  >
+    Lag Aktiveret
+  </mat-checkbox>
+  <b> &nbsp; | &nbsp; </b>
 
-  Vælg lag
-  <select #layer name="layer" id="layer" (change)="layerSelect(layer.value)">
-    <option value="0">Normal</option>
-    <option value="1">Anden farve</option>
-    <option value="2">Weighted</option>
-    <option value="3">Stor radius</option>
-  </select>
-  <br>
-  <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
-    Søg efter måned
-    <br>
-  <input #date1 type="month" name="date1" id="date1" min="2017-01" max="2022-12" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+  <mat-form-field appearance="fill">
+    <mat-label>Vælg lag</mat-label>
+    <mat-select
+      #layer
+      name="layer"
+      id="layer"
+      (change)="layerSelect(layer.value)"
+    >
+      <mat-option value="0">Normal</mat-option>
+      <mat-option value="1">Anden farve</mat-option>
+      <mat-option value="2">Weighted</mat-option>
+      <mat-option value="3">Stor radius</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br />
+
+  Søg efter måned
+  <br />
+  <input
+    #date1
+    type="month"
+    name="date1"
+    id="date1"
+    min="2017-01"
+    max="2022-12"
+    (change)="
+      filterControl(
+        type.value,
+        time.value,
+        date1.value,
+        date2.value,
+        serious.value,
+        day.value
+      )
+    "
+  />
   ->
-  <input #date2 type="month" name="date2" id="date2" min="2017-01" max="2022-12" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
-  <br>
-  Tid
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  
-  &nbsp;
-  &nbsp;
-  Alvorlighed
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  Dag
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  trafikant
-  <br>
-  <!--<select  #type name="filterBy" (change)="filterControl(type.value, time.value, date1.value, date2.value)">
-    <option value="0" selected >Alle</option>
-    <optgroup #label label="Grad af ulykke" value="1">
-      <option value="1">Mindre alvorlig ulykker</option>
-      <option value="2">Alvorlig ulykker</option>
-    </optgroup>
-    <optgroup  label="Hverdag/Weekend" value="2">
-        <option value="3">Hverdag</option>
-        <option value="4">Weekend</option>
-    </optgroup>
-    <optgroup  label="Ulykke type" value="3">
-      <option value="5">Blød trafikant</option>
-      <option value="6">Motorkøretøj</option>
-  </optgroup>
-  </select>-->
+  <input
+    #date2
+    type="month"
+    name="date2"
+    id="date2"
+    min="2017-01"
+    max="2022-12"
+    (change)="
+      filterControl(
+        type.value,
+        time.value,
+        date1.value,
+        date2.value,
+        serious.value,
+        day.value
+      )
+    "
+  />
 
-  <select #time name="filterByClock" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
-    <option value="0">Alle</option>
-    <option value="1">00.00-05.59</option>
-    <option value="2">06.00-08.59</option>
-    <option value="3">09.00-11.59</option>
-    <option value="4">12.00-15.59</option>
-    <option value="5">16.00-18.59</option>
-    <option value="6">19.00-21.59</option>
-    <option value="7">22.00-23.59</option>
-  </select>
+  <mat-form-field appearance="fill">
+    <mat-label>Tid</mat-label>
+    <mat-select
+      #time
+      name="filterByClock"
+      (change)="
+        filterControl(
+          type.value,
+          time.value,
+          date1.value,
+          date2.value,
+          serious.value,
+          day.value
+        )
+      "
+    >
+      <mat-option value="0">Alle</mat-option>
+      <mat-option value="1">00.00-05.59</mat-option>
+      <mat-option value="2">06.00-08.59</mat-option>
+      <mat-option value="3">09.00-11.59</mat-option>
+      <mat-option value="4">12.00-15.59</mat-option>
+      <mat-option value="5">16.00-18.59</mat-option>
+      <mat-option value="6">19.00-21.59</mat-option>
+      <mat-option value="7">22.00-23.59</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <select #serious name="seriousness" id="seriousness" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
-    <option value="0">Alle</option>
-    <option value="1">Mindre alvorlig</option>
-    <option value="2">Alvorlig</option>
-  </select>
-  <select #day name="dag" id="dag" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
-    <option value="0">Alle</option>
-    <option value="1">Hverdag</option>
-    <option value="2">Weekend</option>
-  </select>
-  <select #type name="type" id="type" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
-    <option value="0">Alle</option>
-    <option value="1">Blød trafikant</option>
-    <option value="2">Motorkøretøj</option>
-  </select>
+  <mat-form-field appearance="fill">
+    <mat-label>Alvorlighed</mat-label>
+    <mat-select
+      #serious
+      name="seriousness"
+      id="seriousness"
+      (change)="
+        filterControl(
+          type.value,
+          time.value,
+          date1.value,
+          date2.value,
+          serious.value,
+          day.value
+        )
+      "
+    >
+      <mat-option value="0">Alle</mat-option>
+      <mat-option value="1">Mindre alvorlig</mat-option>
+      <mat-option value="2">Alvorlig</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Dag</mat-label>
+    <mat-select
+      #day
+      name="dag"
+      id="dag"
+      (change)="
+        filterControl(
+          type.value,
+          time.value,
+          date1.value,
+          date2.value,
+          serious.value,
+          day.value
+        )
+      "
+    >
+      <mat-option value="0">Alle</mat-option>
+      <mat-option value="1">Hverdag</mat-option>
+      <mat-option value="2">Weekend</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Traffikant</mat-label>
+    <mat-select
+      #type
+      name="type"
+      id="type"
+      (change)="
+        filterControl(
+          type.value,
+          time.value,
+          date1.value,
+          date2.value,
+          serious.value,
+          day.value
+        )
+      "
+    >
+      <mat-option value="0">Alle</mat-option>
+      <mat-option value="1">Blød trafikant</mat-option>
+      <mat-option value="2">Motorkøretøj</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
