@@ -1,8 +1,12 @@
-<label>Søg </label><input type="text" value="{{searchValue}}" #searchInput (keyup)="updateSearchField($event)">
-<br>
-<div id="search-result-box" *ngIf="addresses !== undefined">
-    <button (click)="clearSearch()">x</button>
-    <li *ngFor="let address of addresses">
-        <span (click)="select(address)">{{address.forslagstekst}}</span>
-    </li>
-</div>
+<form class="example-form" id="autocomplete">
+    <input type="text"
+           placeholder="Søg efter en adresse"
+           [formControl]="control"
+           [matAutocomplete]="auto"
+           class="example-input">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectAddress($event.option.value)'>
+      <mat-option *ngFor="let address of options | async" [value]="address">
+        {{address.forslagstekst}}
+      </mat-option>
+    </mat-autocomplete>
+</form>

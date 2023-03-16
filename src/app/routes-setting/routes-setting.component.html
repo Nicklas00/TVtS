@@ -1,27 +1,36 @@
 <button (click)="exit()"><-</button><br>
 
-<img src="/assets/dot-marker.png" alt="green" class="marker-img"><input type="text" value="{{getOriginText()}}" (keyup)="searchOrigin($event)">
-<div *ngIf="originAddresses !== undefined">
-    <button (click)="clearOriginSearch()">x</button>
-    <li *ngFor="let address of originAddresses">
-        <span (click)="selectOriginAddress(address)">{{address.forslagstekst}}</span>
-    </li>
-</div>
+<img src="/assets/dot-marker.png" alt="green" class="marker-img">
+<form class="example-form" id="autocomplete">
+    <input type="text"
+           placeholder="Søg efter en adresse"
+           [formControl]="originControl"
+           [matAutocomplete]="auto"
+           class="example-input">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectOrigin($event.option.value)'>
+      <mat-option *ngFor="let address of originOptions | async" [value]="address">
+        {{address.forslagstekst}}
+      </mat-option>
+    </mat-autocomplete>
+</form>
 
-<br>
 <button (click)="switchAddresses()">v^</button>
 <br>
 
-<img src="/assets/map-marker-black.png" alt="red" class="marker-img"><input type="text" value="{{getDestinationText()}}" (keyup)="searchDestination($event)">
-<div *ngIf="destinationAddresses !== undefined">
-    <button (click)="clearDestinationSearch()">x</button>
-    <li *ngFor="let address of destinationAddresses">
-        <span (click)="selectDestinationAddress(address)">{{address.forslagstekst}}</span>
-    </li>
-</div>
+<img src="/assets/map-marker-black.png" alt="red" class="marker-img">
+<form class="example-form" id="autocomplete">
+    <input type="text"
+           placeholder="Søg efter en adresse"
+           [formControl]="destControl"
+           [matAutocomplete]="auto2"
+           class="example-input">
+    <mat-autocomplete #auto2="matAutocomplete" (optionSelected)='selectDest($event.option.value)'>
+      <mat-option *ngFor="let address of destOptions | async" [value]="address">
+        {{address.forslagstekst}}
+      </mat-option>
+    </mat-autocomplete>
+</form>
 
-<br><br>
 <button (click)="changeMode()"><-></button><span> {{mode}}</span>
 <br><br>
 <button *ngIf="destAddress !== undefined && originAddress !== undefined" (click)="route()">-></button>
-

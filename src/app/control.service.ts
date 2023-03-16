@@ -1,126 +1,78 @@
 import { Injectable } from '@angular/core';
-import { Coordinate } from 'ol/coordinate';
-import { BehaviorSubject, map } from 'rxjs';
-import { mouseCoordinateConverter } from 'src/openlayers-tools/mouse-events';
+import { BehaviorSubject } from 'rxjs';
 import { Address } from './Address';
 import { AddressService } from './address.service';
 import { MapService } from './map.service';
+import { Route } from './Route';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ControlService {
-  readonly emptyAddress = {
-    data: {
-      x: 0,
-      y: 0,
-    },
-    forslagstekst: '',
-  };
+  public routeObject: BehaviorSubject<Route> = new BehaviorSubject<Route>({
+    id: undefined,
+    destination: undefined,
+    origin: undefined,
+    mode: 'pedestrian',
+    features: [],
+  });
 
-  public destination: BehaviorSubject<Address> = new BehaviorSubject<Address>(
-    this.emptyAddress
-  );
-  public origin: BehaviorSubject<Address> = new BehaviorSubject<Address>(
-    this.emptyAddress
-  );
-  public originEmptyState = false;
-  public destEmptyState = false;
   constructor(
-    private mapService: MapService,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private mapService: MapService
   ) {
-    mapService.mouseEvents.clicks
-      .pipe(map(mouseCoordinateConverter('CRS:84')))
-      .subscribe((coords) => {
-        this.newCoords(coords);
-      });
-
-    this.origin.asObservable().subscribe((address) => {
-      if (address.data.x === 0 && address.data.y === 0) {
-        this.originEmptyState = true;
-      } else {
-        this.originEmptyState = false;
-      }
+    addressService.address.subscribe((address: Address) => {
+      this.newAddress(address);
     });
 
-    this.destination.asObservable().subscribe((address) => {
-      if (address.data.x === 0 && address.data.y === 0) {
-        this.destEmptyState = true;
-      } else {
-        this.destEmptyState = false;
-      }
+    mapService.featureEvents.features.subscribe((features: any) => {
+      const route = this.routeObject.getValue();
+      route.features = features;
+      this.routeObject.next(route);
     });
   }
 
-  newCoords(coords: Coordinate) {
-    if (this.destEmptyState) {
-      this.addressService.getAddressByCoordinates(coords).subscribe({
-        next: (reverseAddress) => {
-          const address = {
-            data: {
-              x: reverseAddress.x,
-              y: reverseAddress.y,
-            },
-            forslagstekst: reverseAddress.betegnelse,
-          };
-          this.destination.next(address);
-        },
-        error: (err) => {
-          const address = {
-            data: {
-              x: coords[0],
-              y: coords[1],
-            },
-            forslagstekst: 'Kunne ikke finde adresse',
-          };
-          this.destination.next(address);
-        },
-      });
-    } else if (this.originEmptyState) {
-      this.addressService.getAddressByCoordinates(coords).subscribe({
-        next: (reverseAddress) => {
-          const address = {
-            data: {
-              x: reverseAddress.x,
-              y: reverseAddress.y,
-            },
-            forslagstekst: reverseAddress.betegnelse,
-          };
-          this.origin.next(address);
-        },
-        error: (err) => {
-          const address = {
-            data: {
-              x: coords[0],
-              y: coords[1],
-            },
-            forslagstekst: 'Kunne ikke finde adresse',
-          };
-          this.origin.next(address);
-        },
-      });
+  newAddress(address: Address) {
+    if (!this.routeObject.getValue().destination) {
+      this.setDestination(address);
+    } else if (!this.routeObject.getValue().origin) {
+      this.setOrigin(address);
     }
   }
 
   remove() {
-    this.origin.next(this.emptyAddress);
-    this.destination.next(this.emptyAddress);
+    const route = this.routeObject.getValue();
+
+    route.origin = undefined;
+    route.destination = undefined;
+
+    this.routeObject.next(route);
   }
 
   switch() {
-    const address1 = this.origin.getValue();
-    const address2 = this.destination.getValue();
+    const route = this.routeObject.getValue();
 
-    this.origin.next(address2);
-    this.destination.next(address1);
+    const address1 = this.routeObject.getValue().origin;
+    const address2 = this.routeObject.getValue().destination;
+    route.origin = address2;
+    route.destination = address1;
+
+    this.routeObject.next(route);
   }
 
   setOrigin(address: Address) {
-    this.origin.next(address);
+    const route = this.routeObject.getValue();
+
+    route.origin = address;
+
+    this.routeObject.next(route);
   }
 
   setDestination(address: Address) {
-    this.destination.next(address);
+    const route = this.routeObject.getValue();
+
+    route.destination = address;
+
+    this.routeObject.next(route);
   }
 }
