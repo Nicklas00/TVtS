@@ -28,6 +28,10 @@ export class LayermenuBoxComponent {
         this.mapService.pointsSource?.updateParams({'STYLES': 'postgis:heatmap_radius'})
         break;
       }
+      case "4":{
+        this.mapService.pointsSource?.updateParams({'STYLES': 'point'})
+        break;
+      }
     }
   }
 
@@ -35,7 +39,7 @@ export class LayermenuBoxComponent {
     const CQLarr : string[] = [];
 
     let CQLTime = this.searchByTime(clock);
-    let CQLType = this.searchByType(type);
+    let CQLType = this.searchByTrafficType(type);
     let CQLDate = this.searchByDate(month1, month2);
     let CQLDay = this.searchByDay(day);
     let CQLSeriousness = this.searchBySeriouseness(serious);
@@ -45,77 +49,48 @@ export class LayermenuBoxComponent {
     !CQLType ? {} : CQLarr.push(CQLType);
     !CQLDay ? {} : CQLarr.push(CQLDay);
     !CQLSeriousness ? {} : CQLarr.push(CQLSeriousness);
-
-    this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLarr.join(' and ')});
+    if(CQLarr.length > 0){
+      this.mapService.pointsSource?.updateParams({'CQL_FILTER': CQLarr.join(' and ')});
+      console.log('CQL = ' + CQLarr.join(' and '));
+    }else{
+      this.mapService.pointsSource?.updateParams({'CQL_FILTER': 'id > 0'});
+      console.log("else");
+    }    
   }
 
-  searchByTime(value:string) : string | undefined{
+  searchByTime(value:string){
     if(value == "0"){
-      return undefined;
+      return undefined
     }else{
       return `time_interval_id = '${value}'`;
     }
   }
 
-  searchBySeriouseness(value:string | undefined){
+  searchBySeriouseness(value:string){
     if(value == '0'){
-      return undefined;
+      return undefined
     }else{
       return `seriousness_id = '${value}'`;
     }
   }
 
-  searchByDay(value:string | undefined){
+  searchByDay(value:string){
     if(value == '0'){
-      return undefined;
+      return undefined
     }else{
       return `day_type_id = '${value}'`;
     }
   }
 
-  searchByTrafficType(value:string | undefined){
+  searchByTrafficType(value:string){
     if(value == '0'){
-      return undefined;
+      return undefined
     }else{
       return `traffic_type_id = '${value}'`;
     }
   }
 
-  searchByType(value: string | undefined){
-    switch(value){
-      case "0":{
-        return undefined;
-        break;
-      }
-      case "1":{
-        return `seriousness_id = '1'`;
-        break;
-      }
-      case "2":{
-        return `seriousness_id = '2'`;
-        break;
-      }
-      case "3":{
-        return `day_type_id = '1'`;
-        break;
-      }
-      case "4":{
-        return `day_type_id = '2'`;
-        break;
-      }
-      case "5":{
-        return `traffic_type_id = '1'`;
-        break;
-      }
-      case "6":{
-        return `traffic_type_id = '2'`;
-        break;
-      }
-    } 
-    return undefined;
-  }
-
-  searchByDate(date1: String, date2: String):string | undefined{    
+  searchByDate(date1: String, date2: String){    
     if(!date1 || !date2){
       return undefined;
     }else{
@@ -125,26 +100,43 @@ export class LayermenuBoxComponent {
     
   }
 
-  enableLayer(isChecked: any) {
+  enableLayer(isChecked: any, id:string) {
     if (isChecked.target.checked) {
-      this.addLayer();
+      this.addLayer(id);
+      console.log(id);
+      
     } else {
-      this.removeLayer();
+      this.removeLayer(id);
+      console.log(id);
+      
     }
   }
 
-  removeLayer() {
-    this.mapService.removeWMSToMap(this.mapService.testMap, 'AP');
+  removeLayer(id:string) {
+    if(id == "1"){
+      this.mapService.removeWMSToMap(this.mapService.testMap, 'AP');
+    }else{
+      this.mapService.removeWMSToMap(this.mapService.testMap, 'grid'); 
+    }
     console.log('removed layer');
   }
 
-  addLayer() {
+  addLayer(id:string) {
+    if(id == "1"){
     this.mapService.addWMSToMap(
       this.mapService.testMap,
       this.mapService.pointsSource!,
       'AP',
       5
     );
+  }else{
+    this.mapService.addWMSToMap(
+      this.mapService.testMap,
+      this.mapService.gridSource!,
+      'grid',
+      5
+    );
+  }
     console.log('added layer');
   }
 }

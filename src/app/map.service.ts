@@ -19,6 +19,7 @@ export class MapService {
   markerSource: VectorSource | undefined;
   routesSources2: ImageWMS = new ImageWMS();
   pointsSource: ImageWMS | undefined;
+  gridSource: ImageWMS | undefined;
   routeVectorSource = new VectorSource();
   testMap: Map = new Map();
   idkMap = new Map();
@@ -38,6 +39,7 @@ export class MapService {
       const routesLayers = 'postgis:routes_detail';
       const epsgProjection25832 = 'EPSG:25832';
       const layerURL = '/postgis/wms?';
+      const gridLayer = 'postgis:uag_alle';
 
       if (source) {
         const olMap = new Map({
@@ -95,6 +97,14 @@ export class MapService {
         );
         this.pointsSource = wmsSource;
 
+        const gridLayerSource = this.createImageWMS(
+          gridLayer,
+          epsgProjection25832,
+          layerURL,
+          "id > 0"
+        );
+
+        this.gridSource = gridLayerSource;
         this.addWMSToMap(olMap, wmsSource, 'AP', 5);
         this.addWMSToMap(olMap, routesSource, 'routes', 9);
 
