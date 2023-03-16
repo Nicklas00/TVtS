@@ -1,63 +1,69 @@
 <div id="layer-menu-box">
+  <h4>Filtrer data</h4>
   <input type="checkbox" (click)="enableLayer($event)" checked />
-  Enable Layer
-  <button (click)="filterControl(value.value, time.value, date1.value, date2.value)">Søg alle</button>
-  
-  <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
-  <br>
-  <br>
-    Search by month
-    <br>
-  <input #date1 type="month" name="date1" id="date1">
-  ->
-  <input #date2 type="month" name="date2" id="date2">
-  <button (click)="searchByDate(date1.value, date2.value)">søg</button>
-  <br>
-  filter data
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
+  Aktiver lag
+  <b> &nbsp;   |  &nbsp;  </b> 
 
-  Select by time of day
+  Vælg lag
+  <select #layer name="layer" id="layer" (change)="layerSelect(layer.value)">
+    <option value="0">Normal</option>
+    <option value="1">Anden farve</option>
+    <option value="2">Weighted</option>
+    <option value="3">Stor radius</option>
+  </select>
   <br>
-  <select  #value name="filterBy" (change)="filterBy(value.value)">
+  <!--<input type="checkbox" (click)="enableLayer($event)" checked value="2017" />-->
+    Søg efter måned
+    <br>
+  <input #date1 type="month" name="date1" id="date1" min="2017-01" max="2022-12" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+  ->
+  <input #date2 type="month" name="date2" id="date2" min="2017-01" max="2022-12" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+  <br>
+  Tid
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  
+  &nbsp;
+  &nbsp;
+  Alvorlighed
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  Dag
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  &nbsp;
+  trafikant
+  <br>
+  <!--<select  #type name="filterBy" (change)="filterControl(type.value, time.value, date1.value, date2.value)">
     <option value="0" selected >Alle</option>
-    <optgroup #label label="Grad af ulykke" id="GaU" value="1">
+    <optgroup #label label="Grad af ulykke" value="1">
       <option value="1">Mindre alvorlig ulykker</option>
       <option value="2">Alvorlig ulykker</option>
     </optgroup>
-    <optgroup  label="Hverdag/Weekend" value="2" id="HW">
+    <optgroup  label="Hverdag/Weekend" value="2">
         <option value="3">Hverdag</option>
         <option value="4">Weekend</option>
     </optgroup>
-    <optgroup  label="Ulykke type" id="UT" value="3">
+    <optgroup  label="Ulykke type" value="3">
       <option value="5">Blød trafikant</option>
       <option value="6">Motorkøretøj</option>
   </optgroup>
-  </select>
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  <select #time name="filterByClock" (change)="searchByTime(time.value)">
-    <option value="0">Alle tidspunkter</option>
+  </select>-->
+
+  <select #time name="filterByClock" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+    <option value="0">Alle</option>
     <option value="1">00.00-05.59</option>
     <option value="2">06.00-08.59</option>
     <option value="3">09.00-11.59</option>
@@ -67,4 +73,19 @@
     <option value="7">22.00-23.59</option>
   </select>
 
+  <select #serious name="seriousness" id="seriousness" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+    <option value="0">Alle</option>
+    <option value="1">Mindre alvorlig</option>
+    <option value="2">Alvorlig</option>
+  </select>
+  <select #day name="dag" id="dag" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+    <option value="0">Alle</option>
+    <option value="1">Hverdag</option>
+    <option value="2">Weekend</option>
+  </select>
+  <select #type name="type" id="type" (change)="filterControl(type.value, time.value, date1.value, date2.value, serious.value, day.value)">
+    <option value="0">Alle</option>
+    <option value="1">Blød trafikant</option>
+    <option value="2">Motorkøretøj</option>
+  </select>
 </div>
