@@ -1,6 +1,6 @@
-<button (click)="exit()"><-</button><br>
+<button (click)="exit()"><fa-icon [icon]="faArrowLeft"></fa-icon></button><br />
 
-<img src="/assets/dot-marker.png" alt="green" class="marker-img">
+<img src="/assets/dot-marker.png" alt="green" class="marker-img" />
 <form class="example-form" id="autocomplete">
     <input type="text"
            placeholder="Søg efter en adresse"
@@ -14,10 +14,12 @@
     </mat-autocomplete>
 </form>
 
-<button (click)="switchAddresses()">v^</button>
-<br>
+<button (click)="switchAddresses()">
+  <fa-icon [icon]="faRepeat"></fa-icon>
+</button>
+<br />
 
-<img src="/assets/map-marker-black.png" alt="red" class="marker-img">
+<img src="/assets/map-marker-black.png" alt="red" class="marker-img" />
 <form class="example-form" id="autocomplete">
     <input type="text"
            placeholder="Søg efter en adresse"
@@ -31,6 +33,11 @@
     </mat-autocomplete>
 </form>
 
-<button (click)="changeMode()"><-></button><span> {{mode}}</span>
-<br><br>
-<button *ngIf="destAddress !== undefined && originAddress !== undefined" (click)="route()">-></button>
+<button (click)="changeMode()"><fa-icon [icon]="faRightLeft"></fa-icon></button
+><span> {{ mode }}</span> <br /><br />
+<button
+  *ngIf="destAddress !== undefined && originAddress !== undefined"
+  (click)="route()"
+>
+  <fa-icon [icon]="faArrowRight"></fa-icon>
+</button>

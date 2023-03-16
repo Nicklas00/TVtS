@@ -6,6 +6,10 @@ import { AddressService } from '../address.service';
 import { ControlService } from '../control.service';
 import { MapService } from '../map.service';
 import { RoutesService } from '../routes.service';
+import { faRightLeft } from '@fortawesome/free-solid-svg-icons';
+import { faRepeat } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-routes-setting',
@@ -13,6 +17,11 @@ import { RoutesService } from '../routes.service';
   styleUrls: ['./routes-setting.component.css'],
 })
 export class RoutesSettingComponent {
+  faRightLeft = faRightLeft;
+  faRepeat = faRepeat;
+  faArrowRight = faArrowRight;
+  faArrowLeft = faArrowLeft;
+
   @Input() destAddress: Address | undefined;
   @Input() originAddress: Address | undefined;
 
@@ -46,15 +55,15 @@ export class RoutesSettingComponent {
     );
 
     controlService.routeObject.asObservable().subscribe((route) => {
-      if(route.origin) {
+      if (route.origin) {
         this.originControl.patchValue(route.origin.forslagstekst);
       } else {
-          this.originControl.patchValue('');
+        this.originControl.patchValue('');
       }
-      if(route.destination) {
+      if (route.destination) {
         this.destControl.patchValue(route.destination.forslagstekst);
       } else {
-          this.destControl.patchValue('');
+        this.destControl.patchValue('');
       }
     });
   }
@@ -71,7 +80,7 @@ export class RoutesSettingComponent {
 
   route() {
     let modeEn = '';
-    if(this.mode === 'Fodgænger') {
+    if (this.mode === 'Fodgænger') {
       modeEn = 'pedestrian';
     } else {
       modeEn = 'bicycle';
