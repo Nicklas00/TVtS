@@ -1,36 +1,58 @@
-<button (click)="exit()"><-</button><br>
+<script
+  src="https://kit.fontawesome.com/4347c1c464.js"
+  crossorigin="anonymous"
+></script>
 
-<img src="/assets/dot-marker.png" alt="green" class="marker-img">
+<button (click)="exit()"><fa-icon [icon]="faArrowLeft"></fa-icon></button><br />
+
+<img src="/assets/dot-marker.png" alt="green" class="marker-img" />
 <form class="example-form" id="autocomplete">
-    <input type="text"
-           placeholder="Søg efter en adresse"
-           [formControl]="originControl"
-           [matAutocomplete]="auto"
-           class="example-input">
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectOrigin($event.option.value)'>
-      <mat-option *ngFor="let address of originOptions | async" [value]="address">
-        {{address.forslagstekst}}
-      </mat-option>
-    </mat-autocomplete>
+  <input
+    type="text"
+    placeholder="Søg efter en adresse"
+    [formControl]="originControl"
+    [matAutocomplete]="auto"
+    class="example-input"
+  />
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="selectOrigin($event.option.value)"
+  >
+    <mat-option *ngFor="let address of originOptions | async" [value]="address">
+      {{ address.forslagstekst }}
+    </mat-option>
+  </mat-autocomplete>
 </form>
 
-<button (click)="switchAddresses()">v^</button>
-<br>
+<button (click)="switchAddresses()">
+  <fa-icon [icon]="faRepeat"></fa-icon>
+</button>
+<br />
 
-<img src="/assets/map-marker-black.png" alt="red" class="marker-img">
+<img src="/assets/map-marker-black.png" alt="red" class="marker-img" />
 <form class="example-form" id="autocomplete">
-    <input type="text"
-           placeholder="Søg efter en adresse"
-           [formControl]="destControl"
-           [matAutocomplete]="auto2"
-           class="example-input">
-    <mat-autocomplete #auto2="matAutocomplete" (optionSelected)='selectDest($event.option.value)'>
-      <mat-option *ngFor="let address of destOptions | async" [value]="address">
-        {{address.forslagstekst}}
-      </mat-option>
-    </mat-autocomplete>
+  <input
+    type="text"
+    placeholder="Søg efter en adresse"
+    [formControl]="destControl"
+    [matAutocomplete]="auto2"
+    class="example-input"
+  />
+  <mat-autocomplete
+    #auto2="matAutocomplete"
+    (optionSelected)="selectDest($event.option.value)"
+  >
+    <mat-option *ngFor="let address of destOptions | async" [value]="address">
+      {{ address.forslagstekst }}
+    </mat-option>
+  </mat-autocomplete>
 </form>
 
-<button (click)="changeMode()"><-></button><span> {{mode}}</span>
-<br><br>
-<button *ngIf="destAddress !== undefined && originAddress !== undefined" (click)="route()">-></button>
+<button (click)="changeMode()"><fa-icon [icon]="faRightLeft"></fa-icon></button
+><span> {{ mode }}</span> <br /><br />
+<button
+  *ngIf="destAddress !== undefined && originAddress !== undefined"
+  (click)="route()"
+>
+  <fa-icon [icon]="faArrowRight"></fa-icon>
+</button>
