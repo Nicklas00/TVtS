@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Observable, startWith, switchMap } from 'rxjs';
 import { Address } from '../Address';
 import { AddressService } from '../address.service';
 import { ControlService } from '../control.service';
@@ -14,10 +16,12 @@ export class RoutesSettingComponent {
   @Input() destAddress: Address | undefined;
   @Input() originAddress: Address | undefined;
 
-  originAddresses: Address[] | undefined;
-  destinationAddresses: Address[] | undefined;
-
   mode: string = 'Fodgænger';
+
+  originControl = new FormControl('');
+  destControl = new FormControl('');
+  originOptions: Observable<Address[]>;
+  destOptions: Observable<Address[]>;
 
   constructor(
     private routesService: RoutesService,
@@ -30,7 +34,41 @@ export class RoutesSettingComponent {
         cql_filter: 'summary_id=' + response.id,
       });
     });
+
+    this.originOptions = this.originControl.valueChanges.pipe(
+      startWith('Odense'),
+      switchMap((value) => addressService.getAddressAutocomplete(value!))
+    );
+
+    this.destOptions = this.destControl.valueChanges.pipe(
+      startWith('Odense'),
+      switchMap((value) => addressService.getAddressAutocomplete(value!))
+    );
+
+    controlService.routeObject.asObservable().subscribe((route) => {
+      if(route.origin) {
+        this.originControl.patchValue(route.origin.forslagstekst);
+      } else {
+          this.originControl.patchValue('');
+      }
+      if(route.destination) {
+        this.destControl.patchValue(route.destination.forslagstekst);
+      } else {
+          this.destControl.patchValue('');
+      }
+    });
   }
+
+  selectOrigin(address: Address) {
+    this.controlService.setOrigin(address);
+    this.originControl.patchValue(address.forslagstekst);
+  }
+
+  selectDest(address: Address) {
+    this.controlService.setDestination(address);
+    this.destControl.patchValue(address.forslagstekst);
+  }
+
   route() {
     let modeEn = '';
     if(this.mode === 'Fodgænger') {
@@ -63,62 +101,6 @@ export class RoutesSettingComponent {
 
   switchAddresses() {
     this.controlService.switch();
-  }
-
-  searchOrigin(x: any) {
-    this.addressService.getAddressAutocomplete(x.target.value).subscribe({
-      next: (addressData) => {
-        this.originAddresses = addressData;
-      },
-      error: (err) => {
-        this.originAddresses = undefined;
-      },
-    });
-  }
-
-  searchDestination(x: any) {
-    this.addressService.getAddressAutocomplete(x.target.value).subscribe({
-      next: (addressData) => {
-        this.destinationAddresses = addressData;
-      },
-      error: (err) => {
-        this.destinationAddresses = undefined;
-      },
-    });
-  }
-
-  clearOriginSearch() {
-    this.originAddresses = undefined;
-  }
-
-  clearDestinationSearch() {
-    this.destinationAddresses = undefined;
-  }
-
-  selectOriginAddress(address: Address) {
-    this.controlService.setOrigin(address);
-    this.clearOriginSearch();
-  }
-
-  selectDestinationAddress(address: Address) {
-    this.controlService.setDestination(address);
-    this.clearDestinationSearch();
-  }
-
-  getOriginText(): string {
-    if (this.originAddress === undefined) {
-      return '';
-    } else {
-      return this.originAddress.forslagstekst;
-    }
-  }
-
-  getDestinationText(): string {
-    if (this.destAddress === undefined) {
-      return '';
-    } else {
-      return this.destAddress.forslagstekst;
-    }
   }
 
   changeMode() {
