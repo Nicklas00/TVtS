@@ -5,9 +5,9 @@
     <input type="text"
            placeholder="Søg efter en adresse"
            [formControl]="originControl"
-           [matAutocomplete]="auto"
+           [matAutocomplete]="autoOrigin"
            class="example-input">
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectOrigin($event.option.value)'>
+    <mat-autocomplete #autoOrigin="matAutocomplete" (optionSelected)='selectOrigin($event.option.value)'>
       <mat-option *ngFor="let address of originOptions | async" [value]="address">
         {{address.forslagstekst}}
       </mat-option>
@@ -22,9 +22,9 @@
     <input type="text"
            placeholder="Søg efter en adresse"
            [formControl]="destControl"
-           [matAutocomplete]="auto2"
+           [matAutocomplete]="autoDest"
            class="example-input">
-    <mat-autocomplete #auto2="matAutocomplete" (optionSelected)='selectDest($event.option.value)'>
+    <mat-autocomplete #autoDest="matAutocomplete" (optionSelected)='selectDest($event.option.value)'>
       <mat-option *ngFor="let address of destOptions | async" [value]="address">
         {{address.forslagstekst}}
       </mat-option>
