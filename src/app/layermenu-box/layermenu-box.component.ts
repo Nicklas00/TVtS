@@ -47,7 +47,7 @@ export class LayermenuBoxComponent {
     let CQLDay = this.searchByDay(day);
     let CQLSeriousness = this.searchBySeriouseness(serious);
 
-    !CQLTime ? console.log("Time er ikke eksisterende") : CQLarr.push(CQLTime);
+    !CQLTime ? {} : CQLarr.push(CQLTime);
     !CQLDate ? {} : CQLarr.push(CQLDate);
     !CQLType ? {} : CQLarr.push(CQLType);
     !CQLDay ? {} : CQLarr.push(CQLDay);
@@ -116,7 +116,6 @@ export class LayermenuBoxComponent {
   }
 
   removeLayer(id:string) {
-    console.log(id);
     if(id == "1"){
       this.mapService.removeWMSToMap(this.mapService.testMap, 'AP');
     }else{
@@ -126,7 +125,6 @@ export class LayermenuBoxComponent {
   }
 
   addLayer(id:string) {
-    console.log(id);
     if(id == "1"){
     this.mapService.addWMSToMap(
       this.mapService.testMap,
