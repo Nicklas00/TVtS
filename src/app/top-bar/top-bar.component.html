@@ -1,4 +1,4 @@
 <div id="info-box">
-    <app-search *ngIf="originAddress===undefined && destinationAddress===undefined"></app-search>
-    <app-routes-setting [destAddress]="destinationAddress!" [originAddress]="originAddress!" *ngIf="originAddress!==undefined || destinationAddress!==undefined"></app-routes-setting>
+    <app-search *ngIf="!(controlService.anyAddressSet | async)"></app-search>
+    <app-routes-setting *ngIf="(controlService.anyAddressSet | async)"></app-routes-setting>
 </div>
