@@ -2,21 +2,16 @@
 
 <img src="/assets/dot-marker.png" alt="green" class="marker-img" />
 <form class="example-form" id="autocomplete">
-  <input
-    type="text"
-    placeholder="Søg efter en adresse"
-    [formControl]="originControl"
-    [matAutocomplete]="auto"
-    class="example-input"
-  />
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    (optionSelected)="selectOrigin($event.option.value)"
-  >
-    <mat-option *ngFor="let address of originOptions | async" [value]="address">
-      {{ address.forslagstekst }}
-    </mat-option>
-  </mat-autocomplete>
+    <input type="text"
+           placeholder="Søg efter en adresse"
+           [formControl]="originControl"
+           [matAutocomplete]="autoOrigin"
+           class="example-input">
+    <mat-autocomplete #autoOrigin="matAutocomplete" (optionSelected)='selectOrigin($event.option.value)'>
+      <mat-option *ngFor="let address of originOptions | async" [value]="address">
+        {{address.forslagstekst}}
+      </mat-option>
+    </mat-autocomplete>
 </form>
 
 <button (click)="switchAddresses()">
@@ -26,21 +21,16 @@
 
 <img src="/assets/map-marker-black.png" alt="red" class="marker-img" />
 <form class="example-form" id="autocomplete">
-  <input
-    type="text"
-    placeholder="Søg efter en adresse"
-    [formControl]="destControl"
-    [matAutocomplete]="auto2"
-    class="example-input"
-  />
-  <mat-autocomplete
-    #auto2="matAutocomplete"
-    (optionSelected)="selectDest($event.option.value)"
-  >
-    <mat-option *ngFor="let address of destOptions | async" [value]="address">
-      {{ address.forslagstekst }}
-    </mat-option>
-  </mat-autocomplete>
+    <input type="text"
+           placeholder="Søg efter en adresse"
+           [formControl]="destControl"
+           [matAutocomplete]="autoDest"
+           class="example-input">
+    <mat-autocomplete #autoDest="matAutocomplete" (optionSelected)='selectDest($event.option.value)'>
+      <mat-option *ngFor="let address of destOptions | async" [value]="address">
+        {{address.forslagstekst}}
+      </mat-option>
+    </mat-autocomplete>
 </form>
 
 <button (click)="changeMode()"><fa-icon [icon]="faRightLeft"></fa-icon></button
