@@ -69,7 +69,7 @@ export class RoutesService {
           cql_filter: 'summary_id=' + routeRequest.id,
         });
       } else {
-        mapService.routesSources2?.updateParams({
+        mapService.routesSources?.updateParams({
           cql_filter: 'summary_id=' + 0,
         });
       }

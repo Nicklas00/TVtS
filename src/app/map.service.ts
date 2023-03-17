@@ -17,7 +17,7 @@ import VectorSource from 'ol/source/Vector';
 export class MapService {
   readonly mouseEvents = new MouseEvents();
   markerSource: VectorSource | undefined;
-  routesSources2: ImageWMS = new ImageWMS();
+  routesSources: ImageWMS = new ImageWMS();
   pointsSource: ImageWMS | undefined;
   gridSource: ImageWMS | undefined;
   routeVectorSource = new VectorSource();
@@ -83,7 +83,7 @@ export class MapService {
           layerURL,
           'summary_id=0'
         );
-        this.routesSources2 = routesSource;
+        this.routesSources = routesSource;
 
         this.featureEvents
           .setSource(routesSource, 'postgis:routes_detail')
