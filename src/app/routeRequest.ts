@@ -1,5 +1,5 @@
 export interface routeRequest {
-  id: number;
+  id: number | undefined;
   mode: string;
   origin: {
     lat: number;
@@ -9,4 +9,5 @@ export interface routeRequest {
     lat: number;
     lon: number;
   };
+  message: string;
 }
