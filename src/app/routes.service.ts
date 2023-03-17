@@ -65,7 +65,7 @@ export class RoutesService {
 
     this.routeRequest.subscribe((routeRequest) => {
       if (routeRequest) {
-        mapService.routesSources2?.updateParams({
+        mapService.routesSources?.updateParams({
           cql_filter: 'summary_id=' + routeRequest.id,
         });
       } else {
