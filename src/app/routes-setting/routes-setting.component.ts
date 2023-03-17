@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, startWith, switchMap } from 'rxjs';
 import { Address } from '../Address';
@@ -22,10 +22,6 @@ export class RoutesSettingComponent {
   faArrowRight = faArrowRight;
   faArrowLeft = faArrowLeft;
 
-  @Input() destAddress: Address | undefined;
-  @Input() originAddress: Address | undefined;
-
-  mode: string = 'Fodgænger';
 
   originControl = new FormControl('');
   destControl = new FormControl('');
@@ -35,14 +31,9 @@ export class RoutesSettingComponent {
   constructor(
     private routesService: RoutesService,
     private mapService: MapService,
-    private controlService: ControlService,
+    public controlService: ControlService,
     private addressService: AddressService
   ) {
-    routesService.summarySubject.asObservable().subscribe((response) => {
-      mapService.routesSources2?.updateParams({
-        cql_filter: 'summary_id=' + response.id,
-      });
-    });
 
     this.originOptions = this.originControl.valueChanges.pipe(
       startWith('Odense'),
@@ -79,44 +70,14 @@ export class RoutesSettingComponent {
   }
 
   route() {
-    let modeEn = '';
-    if (this.mode === 'Fodgænger') {
-      modeEn = 'pedestrian';
-    } else {
-      modeEn = 'bicycle';
-    }
-    const routeRequest = {
-      id: 0,
-      mode: modeEn,
-      origin: {
-        lat: this.destAddress!.data.y,
-        lon: this.destAddress!.data.x,
-      },
-      destination: {
-        lat: this.originAddress!.data.y,
-        lon: this.originAddress!.data.x,
-      },
-    };
-    this.routesService.save(routeRequest);
+    this.controlService.setRoute();
   }
 
   exit() {
     this.controlService.remove();
-    this.routesService.removeSelectedRoute();
-    this.mapService.routesSources2?.updateParams({
-      cql_filter: 'summary_id=0',
-    });
   }
 
   switchAddresses() {
     this.controlService.switch();
-  }
-
-  changeMode() {
-    if (this.mode === 'Fodgænger') {
-      this.mode = 'Cykel';
-    } else {
-      this.mode = 'Fodgænger';
-    }
   }
 }
