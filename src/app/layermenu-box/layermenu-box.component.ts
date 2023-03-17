@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { __values } from 'tslib';
 import { MapService } from '../map.service';
 
@@ -9,6 +10,8 @@ import { MapService } from '../map.service';
 })
 export class LayermenuBoxComponent {
   constructor(private mapService: MapService) {}
+
+  alle = new FormControl("0");
 
   layerSelect(value:string){
     switch(value){
@@ -44,7 +47,7 @@ export class LayermenuBoxComponent {
     let CQLDay = this.searchByDay(day);
     let CQLSeriousness = this.searchBySeriouseness(serious);
 
-    !CQLTime ? {} : CQLarr.push(CQLTime);
+    !CQLTime ? console.log("Time er ikke eksisterende") : CQLarr.push(CQLTime);
     !CQLDate ? {} : CQLarr.push(CQLDate);
     !CQLType ? {} : CQLarr.push(CQLType);
     !CQLDay ? {} : CQLarr.push(CQLDay);
@@ -59,7 +62,7 @@ export class LayermenuBoxComponent {
   }
 
   searchByTime(value:string){
-    if(value == "0"){
+    if(value == "0" || value === undefined){
       return undefined
     }else{
       return `time_interval_id = '${value}'`;
@@ -67,7 +70,7 @@ export class LayermenuBoxComponent {
   }
 
   searchBySeriouseness(value:string){
-    if(value == '0'){
+    if(value == '0' || value === undefined){
       return undefined
     }else{
       return `seriousness_id = '${value}'`;
@@ -75,7 +78,7 @@ export class LayermenuBoxComponent {
   }
 
   searchByDay(value:string){
-    if(value == '0'){
+    if(value == '0' || value === undefined){
       return undefined
     }else{
       return `day_type_id = '${value}'`;
@@ -83,7 +86,7 @@ export class LayermenuBoxComponent {
   }
 
   searchByTrafficType(value:string){
-    if(value == '0'){
+    if(value == '0' || value === undefined){
       return undefined
     }else{
       return `traffic_type_id = '${value}'`;
@@ -91,7 +94,7 @@ export class LayermenuBoxComponent {
   }
 
   searchByDate(date1: String, date2: String){    
-    if(!date1 || !date2){
+    if(!date1 || !date2 || date1 === undefined || date2 === undefined){
       return undefined;
     }else{
       return `date >= '${date1 + '-01'}' and date <= '${date2+'-01'}'`;
@@ -113,6 +116,7 @@ export class LayermenuBoxComponent {
   }
 
   removeLayer(id:string) {
+    console.log(id);
     if(id == "1"){
       this.mapService.removeWMSToMap(this.mapService.testMap, 'AP');
     }else{
@@ -122,6 +126,7 @@ export class LayermenuBoxComponent {
   }
 
   addLayer(id:string) {
+    console.log(id);
     if(id == "1"){
     this.mapService.addWMSToMap(
       this.mapService.testMap,
