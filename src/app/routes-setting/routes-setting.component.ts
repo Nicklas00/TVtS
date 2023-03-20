@@ -34,7 +34,6 @@ export class RoutesSettingComponent {
     public controlService: ControlService,
     private addressService: AddressService
   ) {
-
     this.originOptions = this.originControl.valueChanges.pipe(
       startWith('Odense'),
       switchMap((value) => addressService.getAddressAutocomplete(value!))
@@ -46,12 +45,21 @@ export class RoutesSettingComponent {
     );
 
     controlService.routeObject.asObservable().subscribe((route) => {
-      if (route.origin) {
+      if (
+        route.origin &&
+        this.originControl.value === route.origin.forslagstekst
+      ) {
+      } else if (route.origin) {
         this.originControl.patchValue(route.origin.forslagstekst);
       } else {
         this.originControl.patchValue('');
       }
-      if (route.destination) {
+
+      if (
+        route.destination &&
+        this.destControl.value === route.destination.forslagstekst
+      ) {
+      } else if (route.destination) {
         this.destControl.patchValue(route.destination.forslagstekst);
       } else {
         this.destControl.patchValue('');
