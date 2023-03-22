@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { Feature } from 'ol';
+import {
+  BehaviorSubject,
+  combineLatest,
+  map,
+  Observable,
+  Subscription,
+} from 'rxjs';
 import { Address } from './Address';
 import { AddressService } from './address.service';
 import { MapService } from './map.service';
@@ -9,177 +16,191 @@ import { Route } from './Route';
   providedIn: 'root',
 })
 export class ControlService {
-  public routeObject: BehaviorSubject<Route> = new BehaviorSubject<Route>({
-    resultId: undefined,
-    destination: undefined,
-    origin: undefined,
-    mode: 1,
-    features: [],
-    setRoute: false,
-  });
+  private resultIdX: BehaviorSubject<number | undefined> = new BehaviorSubject<
+    number | undefined
+  >(undefined);
+  private destinationX: BehaviorSubject<Address | undefined> =
+    new BehaviorSubject<Address | undefined>(undefined);
+  private originX: BehaviorSubject<Address | undefined> = new BehaviorSubject<
+    Address | undefined
+  >(undefined);
+  private modeX: BehaviorSubject<number> = new BehaviorSubject(1);
+  private featuresX: BehaviorSubject<Feature[]> = new BehaviorSubject<
+    Feature[]
+  >([]);
+  private setRouteBoolX: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  originAddressDesc: Observable<string | undefined>;
-  destinationAddressDesc: Observable<string | undefined>;
-  modeDesc: Observable<string>;
-  anyAddressSet: Observable<Boolean>;
+  public routeTest: Observable<Route>;
+
+  public routeDefinition: Observable<Route>;
+
+  public originAddressDesc: Observable<string | undefined>;
+  public destinationAddressDesc: Observable<string | undefined>;
+  public modeDesc: Observable<string>;
+  public anyAddressSet: Observable<Boolean>;
+
+  public features = this.featuresX.asObservable();
+
+  private mouseAddressSubscription: Subscription | undefined;
 
   constructor(
     private addressService: AddressService,
     private mapService: MapService
   ) {
-    addressService.address.subscribe((address: Address) => {
-      this.newAddress(address);
+    this.routeTest = combineLatest(
+      [
+        this.resultIdX,
+        this.destinationX,
+        this.originX,
+        this.modeX,
+        this.featuresX,
+        this.setRouteBoolX,
+      ],
+      (resultId, destination, origin, mode, features, setRoute) => {
+        return {
+          resultId: resultId,
+          destination: destination,
+          origin: origin,
+          mode: mode,
+          features: features,
+          setRoute: setRoute,
+        };
+      }
+    );
+
+    this.routeDefinition = combineLatest(
+      [this.destinationX, this.originX, this.modeX, this.setRouteBoolX],
+      (destination, origin, mode, setRouteBool) => {
+        return {
+          resultId: -1,
+          destination: destination,
+          origin: origin,
+          mode: mode,
+          features: [],
+          setRoute: setRouteBool,
+        };
+      }
+    );
+
+    this.routeDefinition.subscribe((route) => {
+      if (route.destination && route.origin) {
+        if (this.mouseAddressSubscription) {
+          this.mouseAddressSubscription.unsubscribe();
+          this.mouseAddressSubscription = undefined;
+        }
+      } else {
+        if (!this.mouseAddressSubscription) {
+          this.mouseAddressSubscription = addressService.address.subscribe(
+            (address: Address) => {
+              this.newAddress(address);
+            }
+          );
+        }
+      }
     });
 
     mapService.featureEvents.features.subscribe((features: any) => {
-      const route = this.routeObject.getValue();
-      route.features = features;
-      this.routeObject.next(route);
+      this.featuresX.next(features);
     });
 
-    this.originAddressDesc = this.routeObject
-      .asObservable()
-      .pipe(switchMap(this.routeToAddressDescriptionConverter('origin')));
+    this.originAddressDesc = this.routeTest.pipe(
+      map((routeObject) =>
+        this.routeToAddressDescriptionConverter(routeObject, 'origin')
+      )
+    );
 
-    this.destinationAddressDesc = this.routeObject
-      .asObservable()
-      .pipe(switchMap(this.routeToAddressDescriptionConverter('destination')));
+    this.destinationAddressDesc = this.routeTest.pipe(
+      map((routeObject) =>
+        this.routeToAddressDescriptionConverter(routeObject, 'destination')
+      )
+    );
 
-    this.modeDesc = this.routeObject
-      .asObservable()
-      .pipe(switchMap(this.routeToModeDescriptionConverter()));
+    this.modeDesc = this.routeTest.pipe(
+      map((routeObject) => {
+        switch (routeObject.mode) {
+          case 1:
+            return 'Fodgænger';
+          case 2:
+            return 'Cykel';
+          default:
+            return '';
+        }
+      })
+    );
 
-    this.anyAddressSet = this.routeObject
-      .asObservable()
-      .pipe(switchMap(this.routeToAnyAddressBooleanConverter()));
+    this.anyAddressSet = this.routeTest.pipe(
+      map((routeObject) => {
+        if (routeObject.origin || routeObject.destination) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
   }
 
-  routeToModeDescriptionConverter(): (e: Route) => Observable<string> {
-    let res = '';
-    return (e) => {
-      switch (e.mode) {
-        case 1:
-          res = 'Fodgænger';
-          break;
-        case 2:
-          res = 'Cykel';
-          break;
-        default:
-          break;
-      }
-      return new BehaviorSubject<string>(res).asObservable();
-    };
-  }
-
-  routeToAddressDescriptionConverter(
+  private routeToAddressDescriptionConverter(
+    e: Route,
     x: string
-  ): (e: Route) => Observable<string | undefined> {
-    return (e) => {
-      if (x === 'origin') {
-        if (e.origin) {
-          return new BehaviorSubject<string | undefined>(
-            e.origin?.forslagstekst
-          ).asObservable();
-        } else {
-          return new BehaviorSubject<string | undefined>(
-            undefined
-          ).asObservable();
-        }
+  ): string | undefined {
+    if (x === 'origin') {
+      if (e.origin) {
+        return e.origin.forslagstekst;
       } else {
-        if (e.destination) {
-          return new BehaviorSubject<string | undefined>(
-            e.destination?.forslagstekst
-          ).asObservable();
-        } else {
-          return new BehaviorSubject<string | undefined>(
-            undefined
-          ).asObservable();
-        }
+        return undefined;
       }
-    };
+    } else {
+      if (e.destination) {
+        return e.destination.forslagstekst;
+      } else {
+        return undefined;
+      }
+    }
   }
 
-  routeToAnyAddressBooleanConverter(): (e: Route) => Observable<Boolean> {
-    return (e) => {
-      if (e.origin || e.destination) {
-        return new BehaviorSubject<Boolean>(true).asObservable();
-      } else {
-        return new BehaviorSubject<Boolean>(false).asObservable();
-      }
-    };
-  }
-
-  newAddress(address: Address) {
-    if (!this.routeObject.getValue().destination) {
+  public newAddress(address: Address) {
+    if (!this.destinationX.getValue()) {
       this.setDestination(address);
-    } else if (!this.routeObject.getValue().origin) {
+    } else if (!this.originX.getValue()) {
       this.setOrigin(address);
     }
   }
 
-  remove() {
-    const route = this.routeObject.getValue();
-
-    route.origin = undefined;
-    route.destination = undefined;
-
-    route.setRoute = false;
-
-    this.routeObject.next(route);
+  public remove() {
+    this.destinationX.next(undefined);
+    this.originX.next(undefined);
+    this.setRouteBoolX.next(false);
   }
 
-  switch() {
-    const route = this.routeObject.getValue();
+  public switch() {
+    const originAddress = this.originX.getValue();
+    const destAddress = this.destinationX.getValue();
 
-    const address1 = this.routeObject.getValue().origin;
-    const address2 = this.routeObject.getValue().destination;
-    route.origin = address2;
-    route.destination = address1;
-
-    this.routeObject.next(route);
+    this.originX.next(destAddress);
+    this.destinationX.next(originAddress);
   }
 
-  setOrigin(address: Address) {
-    const route = this.routeObject.getValue();
-
-    route.origin = address;
-
-    this.routeObject.next(route);
+  public setOrigin(address: Address) {
+    this.originX.next(address);
   }
 
-  setDestination(address: Address) {
-    const route = this.routeObject.getValue();
-
-    route.destination = address;
-
-    this.routeObject.next(route);
+  public setDestination(address: Address) {
+    this.destinationX.next(address);
   }
 
-  changeMode() {
-    const route = this.routeObject.getValue();
-
-    if (route.mode === 1) {
-      route.mode = 2;
+  public changeMode() {
+    if (this.modeX.getValue() === 1) {
+      this.modeX.next(2);
     } else {
-      route.mode = 1;
+      this.modeX.next(1);
     }
-
-    this.routeObject.next(route);
   }
 
-  setRoute() {
-    const route = this.routeObject.getValue();
-
-    route.setRoute = true;
-
-    this.routeObject.next(route);
+  public setRoute() {
+    this.setRouteBoolX.next(true);
   }
 
-  removeRoute() {
-    const route = this.routeObject.getValue();
-
-    route.setRoute = false;
-
-    this.routeObject.next(route);
+  public removeRoute() {
+    this.setRouteBoolX.next(false);
   }
 }
