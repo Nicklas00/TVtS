@@ -1,7 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'ol';
-import { interval, Subscription, take, takeUntil, takeWhile } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { __values } from 'tslib';
 import { MapService } from '../map.service';
 
@@ -45,9 +44,6 @@ export class LayermenuBoxComponent {
       serious
     );
     let CQLString = '';
-    console.log('date1= ' + month1 + '  date2 = ' + month2);
-    console.log('CQLFILTER= ' + CQLFilter);
-    console.log('CQLFILTER LÆNGDE = ' + CQLFilter.length);
 
     if (isChecked.target.checked && this.index <= 5) {
       this.sub = this.loopYearFunctionality(
@@ -71,31 +67,26 @@ export class LayermenuBoxComponent {
     let observable = interval(1500);
     let y = CQLFilter.length;
     return observable.subscribe((x) => {
-      console.log('Index length= ' + this.index);
       if (this.index <= 5) {
         if (CQLFilter.length > 1 && month1 !== '' && month2 !== '') {
           CQLFilter[0] = this.dateLoop[this.index];
           CQLString = CQLFilter.join(' and ');
           this.mapService.pointsSource?.updateParams({ CQL_FILTER: CQLString });
-          console.log('jeg er i IF 1. ||| ' + CQLString);
           this.index += 1;
         } else if (CQLFilter.length === 1 && month1 !== '' && month2 !== '') {
           CQLFilter[0] = this.dateLoop[this.index];
           CQLString = CQLFilter.join(' and ');
           this.mapService.pointsSource?.updateParams({ CQL_FILTER: CQLString });
-          console.log('jeg er i IF 2. ||| ' + CQLString);
           this.index += 1;
         } else if (CQLFilter.length >= 1) {
           CQLFilter[y] = this.dateLoop[this.index];
           CQLString = CQLFilter.join(' and ');
           this.mapService.pointsSource?.updateParams({ CQL_FILTER: CQLString });
-          console.log('Jeg er i IF 3 ||| ' + CQLString);
           this.index += 1;
         } else {
           this.mapService.pointsSource?.updateParams({
             CQL_FILTER: this.dateLoop[this.index],
           });
-          console.log('jeg er i else ||| ' + this.dateLoop[this.index]);
           this.index += 1;
         }
       } else {
@@ -162,11 +153,9 @@ export class LayermenuBoxComponent {
     if (CQLarr.length > 0) {
       CQLFull = CQLarr.join(' and ');
       this.mapService.pointsSource?.updateParams({ CQL_FILTER: CQLFull });
-      console.log('CQL = ' + CQLarr.join(' and '));
       return CQLarr;
     } else {
       this.mapService.pointsSource?.updateParams({ CQL_FILTER: 'id > 0' });
-      console.log('else');
       return CQLarr;
     }
   }
@@ -214,38 +203,34 @@ export class LayermenuBoxComponent {
   enableLayer(isChecked: any, id: string) {
     if (isChecked.target.checked) {
       this.addLayer(id);
-      console.log(id);
     } else {
       this.removeLayer(id);
-      console.log(id);
     }
   }
 
   removeLayer(id: string) {
     if (id == '1') {
-      this.mapService.removeWMSToMap(this.mapService.testMap, 'AP');
+      this.mapService.removeWMSToMap(this.mapService.olMap, 'AP');
     } else {
-      this.mapService.removeWMSToMap(this.mapService.testMap, 'grid');
+      this.mapService.removeWMSToMap(this.mapService.olMap, 'grid');
     }
-    console.log('removed layer');
   }
 
   addLayer(id: string) {
     if (id == '1') {
       this.mapService.addWMSToMap(
-        this.mapService.testMap,
+        this.mapService.olMap,
         this.mapService.pointsSource!,
         'AP',
         5
       );
     } else {
       this.mapService.addWMSToMap(
-        this.mapService.testMap,
+        this.mapService.olMap,
         this.mapService.gridSource!,
         'grid',
         5
       );
     }
-    console.log('added layer');
   }
 }
