@@ -1,4 +1,4 @@
-export interface routeRequest {
+export interface RouteRequest {
   id: number | undefined;
   mode: string;
   origin: {
