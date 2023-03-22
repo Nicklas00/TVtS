@@ -8,59 +8,80 @@ import Style from 'ol/style/Style';
 import {
   BehaviorSubject,
   catchError,
+  debounceTime,
+  distinctUntilChanged,
   Observable,
   retry,
   switchMap,
 } from 'rxjs';
-import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { ControlService } from './control.service';
 import { MapService } from './map.service';
 import { Route } from './Route';
-import { routeRequest } from './routeRequest';
+import { RouteRequest } from './RouteRequest';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoutesService {
-  routeRequest: Observable<routeRequest | undefined>;
+  routeRequest: Observable<RouteRequest | undefined>;
   constructor(
     private httpClient: HttpClient,
     private mapService: MapService,
     private controlService: ControlService
   ) {
-    controlService.routeObject.asObservable().subscribe((route) => {
-      mapService.routeVectorSource.clear();
-      if (route.features.length > 0) {
-        const lineString25832 =
-          route.features[0].get('geometry').flatCoordinates;
-        const points = [];
-        for (let i = 0; i < lineString25832.length; i += 2) {
-          points.push(
-            transform(
-              [lineString25832[i], lineString25832[i + 1]],
-              'EPSG:25832',
-              'EPSG:3857'
-            )
+    controlService.features
+      .pipe(debounceTime(200))
+      .pipe(
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.length === curr.length &&
+            prev[0] === curr[0]
           );
+        })
+      )
+      .subscribe((features) => {
+        mapService.routeVectorSource.clear();
+        if (features.length > 0) {
+          const lineString25832 =
+            features[0].get('geometry').flatCoordinates;
+          const points = [];
+          for (let i = 0; i < lineString25832.length; i += 2) {
+            points.push(
+              transform(
+                [lineString25832[i], lineString25832[i + 1]],
+                'EPSG:25832',
+                'EPSG:3857'
+              )
+            );
+          }
+
+          const feature = new Feature({
+            geometry: new LineString(points),
+          });
+          feature.setStyle(
+            new Style({
+              stroke: new Stroke({
+                color: '#7fbffa',
+                width: 5,
+              }),
+            })
+          );
+          mapService.routeVectorSource.addFeature(feature);
         }
+      });
 
-        const feature = new Feature({
-          geometry: new LineString(points),
-        });
-        feature.setStyle(
-          new Style({
-            stroke: new Stroke({
-              color: '#7fbffa',
-              width: 5,
-            }),
-          })
-        );
-        mapService.routeVectorSource.addFeature(feature);
-      }
-    });
-
-    this.routeRequest = controlService.routeObject
-      .asObservable()
+    this.routeRequest = controlService.routeDefinition
+      .pipe(debounceTime(500))
+      .pipe(
+        distinctUntilChanged((prev, curr) => {
+          return (
+            prev.destination === curr.destination &&
+            prev.origin === curr.origin &&
+            prev.mode === curr.mode &&
+            prev.setRoute === curr.setRoute
+          );
+        })
+      )
       .pipe(switchMap(this.routeToSummaryIdConverter()));
 
     this.routeRequest.subscribe((routeRequest) => {
@@ -78,7 +99,7 @@ export class RoutesService {
 
   routeToSummaryIdConverter(): (
     e: Route
-  ) => Observable<routeRequest | undefined> {
+  ) => Observable<RouteRequest | undefined> {
     return (e) => {
       if (e.destination && e.origin && e.setRoute) {
         let mode = '';
@@ -107,13 +128,13 @@ export class RoutesService {
     };
   }
 
-  save(routeRequest: routeRequest): Observable<routeRequest> {
+  save(routeRequest: RouteRequest): Observable<RouteRequest> {
     return this.httpClient
-      .post<routeRequest>('/api/generateRoute', routeRequest)
+      .post<RouteRequest>('/api/generateRoute', routeRequest)
       .pipe(
         retry(1),
         catchError((err) => {
-          return new BehaviorSubject<routeRequest>({
+          return new BehaviorSubject<RouteRequest>({
             id: undefined,
             mode: 'null',
             origin: {
