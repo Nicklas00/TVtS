@@ -17,7 +17,7 @@ export class MarkerService {
     private mapService: MapService,
     private controlService: ControlService
   ) {
-    controlService.routeObject.asObservable().subscribe((route) => {
+    controlService.routeDefinition.subscribe((route) => {
       this.setMarkers(
         mapService.markerSource!,
         route.destination,
