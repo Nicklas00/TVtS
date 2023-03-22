@@ -1,5 +1,8 @@
 <div id="layer-menu-box">
   <h4>Filtrer data</h4>
+
+  <p *ngIf="id3.checked">Data fra: {{ year[index - 1] }}</p>
+
   <mat-checkbox
     #id1
     id="1"
@@ -20,7 +23,25 @@
   >
     Aktiver grid analyse
   </mat-checkbox>
-  <b> &nbsp;   |  &nbsp;  </b> 
+  <mat-checkbox
+    #id3
+    id="3"
+    color="primary"
+    type="checkbox"
+    (click)="
+      loopYear(
+        $event,
+        type.value,
+        time.value,
+        date1.value,
+        date2.value,
+        serious.value,
+        day.value
+      )
+    "
+  >
+    Loop år
+  </mat-checkbox>
 
   <mat-form-field appearance="fill">
     <mat-label>Vælg lag</mat-label>
@@ -37,10 +58,10 @@
       <mat-option value="4">Datapunkter</mat-option>
     </mat-select>
   </mat-form-field>
-  <br>
-    Søg efter måned
-    <br>
-    <input
+  <br />
+  Søg efter måned
+  <br />
+  <input
     #date1
     type="month"
     name="date1"
@@ -76,13 +97,12 @@
         day.value
       )
     "
-  /><br>
+  /><br />
 
   <mat-form-field appearance="fill">
     <mat-label>Tid</mat-label>
     <mat-select
       [formControl]="alle"
-      
       #time
       name="filterByClock"
       (selectionChange)="
@@ -106,7 +126,6 @@
       <mat-option value="7">22.00-23.59</mat-option>
     </mat-select>
   </mat-form-field>
-
 
   <mat-form-field appearance="fill">
     <mat-label>Alvorlighed</mat-label>

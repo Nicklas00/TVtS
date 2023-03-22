@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { epsg } from '../openlayers-tools/epsg';
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
@@ -13,7 +13,7 @@ import { FeatureEvents } from '../openlayers-tools/feature-events';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: 'root'})
 export class MapService {
   readonly mouseEvents = new MouseEvents();
   markerSource: VectorSource | undefined;
@@ -27,6 +27,7 @@ export class MapService {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
   }
+  
   readonly featureEvents = new FeatureEvents();
   createMap(): void {
     createWmtsLayer(
@@ -101,7 +102,8 @@ export class MapService {
           gridLayer,
           epsgProjection25832,
           layerURL,
-          'id > 0'
+          "id > 0",
+          'uag_alle_style'
         );
 
         this.gridSource = gridLayerSource;
@@ -135,12 +137,14 @@ export class MapService {
     layers: string,
     projection: string,
     url: string,
-    cql_filter: string
+    cql_filter: string,
+    style?: string
   ): ImageWMS {
     const wmsSource = new ImageWMS({
       params: {
         LAYERS: layers,
         CQL_FILTER: cql_filter,
+        STYLES: style
       },
       projection: projection,
       url: url,
