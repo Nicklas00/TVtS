@@ -11,8 +11,8 @@ export class OverlayComponent {
 
   bottomDrawerDataBool: Boolean = false;
   constructor(private routeService: RoutesService, private controlService: ControlService) {
-    controlService.routeObject.asObservable().subscribe(route => {
-      if(route.features.length > 0) {
+    controlService.features.subscribe(features => {
+      if(features.length > 0) {
         this.bottomDrawerDataBool = true;
       } else {
         this.bottomDrawerDataBool = false;
