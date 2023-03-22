@@ -13,8 +13,8 @@ export class BottomDrawerComponent {
 
   featuresList: Feature<Geometry>[] = [];
   constructor(private routesService: RoutesService, public controlService: ControlService) {
-    controlService.routeObject.asObservable().subscribe(route => {
-      this.featuresList = route.features;
+    controlService.features.subscribe(features => {
+      this.featuresList = features;
     })
   }
 }
