@@ -17,12 +17,12 @@ import VectorSource from 'ol/source/Vector';
 export class MapService {
   readonly mouseEvents = new MouseEvents();
   markerSource: VectorSource | undefined;
-  routesSources2: ImageWMS = new ImageWMS();
+  routesSources: ImageWMS = new ImageWMS();
   pointsSource: ImageWMS | undefined;
   gridSource: ImageWMS | undefined;
   routeVectorSource = new VectorSource();
-  testMap: Map = new Map();
-  idkMap = new Map();
+  olMap: Map = new Map();
+  layersMap = new Map();
   constructor() {
     epsg.forEach((def) => proj4.defs(def.srid, def.defs));
     register(proj4);
@@ -59,7 +59,7 @@ export class MapService {
             new VectorLayer({
               source: this.routeVectorSource,
               zIndex: 11,
-            })
+            }),
           ],
           view: new View({
             projection: source.getProjection()!,
@@ -76,7 +76,7 @@ export class MapService {
               olMap.getView().getProjection()
             )
           );
-        this.testMap = olMap;
+        this.olMap = olMap;
 
         const routesSource = this.createImageWMS(
           routesLayers,
@@ -84,7 +84,7 @@ export class MapService {
           layerURL,
           'summary_id=0'
         );
-        this.routesSources2 = routesSource;
+        this.routesSources = routesSource;
 
         this.featureEvents
           .setSource(routesSource, 'postgis:routes_detail')
@@ -125,12 +125,12 @@ export class MapService {
     setZindex: number
   ) {
     const layer = new ImageLayer({ source: imageWMS, zIndex: setZindex });
-    this.idkMap.set(key, layer);
+    this.layersMap.set(key, layer);
     olMap.addLayer(layer);
   }
 
   public removeWMSToMap(olMap: Map, key: string) {
-    olMap.removeLayer(this.idkMap.get(key));
+    olMap.removeLayer(this.layersMap.get(key));
   }
 
   public createImageWMS(

@@ -35,9 +35,6 @@
 
 <button (click)="controlService.changeMode()"><fa-icon [icon]="faRightLeft"></fa-icon></button
 ><span> {{ controlService.modeDesc | async }}</span> <br /><br />
-<button
-  *ngIf="controlService.destinationAddressDesc !== undefined && controlService.originAddressDesc!== undefined"
-  (click)="route()"
->
+<button (click)="route()">
   <fa-icon [icon]="faArrowRight"></fa-icon>
 </button>

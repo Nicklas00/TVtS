@@ -3,7 +3,16 @@ import { Address } from '../Address';
 import { AddressService } from '../address.service';
 import { ControlService } from '../control.service';
 import { FormControl } from '@angular/forms';
-import { Observable, startWith, switchMap } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  startWith,
+  switchMap,
+} from 'rxjs';
+import { MapService } from '../map.service';
+import { transform } from 'ol/proj';
+import { Coordinate } from 'ol/coordinate';
 
 @Component({
   selector: 'app-search',
@@ -16,15 +25,33 @@ export class SearchComponent {
 
   constructor(
     private addressService: AddressService,
-    private controlService: ControlService
+    private controlService: ControlService,
+    private mapService: MapService
   ) {
-    this.options = this.control.valueChanges.pipe(
-      startWith('Odense'),
-      switchMap((value) => addressService.getAddressAutocomplete(value!))
-    );
+    this.options = this.control.valueChanges
+      .pipe(debounceTime(300))
+      .pipe(
+        distinctUntilChanged((x, y) => {
+          console.log(x, y);
+          return x === y;
+        })
+      )
+      .pipe(
+        startWith('Odense'),
+        switchMap((value) => addressService.getAddressAutocomplete(value!))
+      );
   }
 
   selectAddress(address: Address) {
     this.controlService.newAddress(address);
+    this.mapService
+      .olMap!.getView()
+      .setCenter(
+        transform(
+          [address.data.x, address.data.y] as Coordinate,
+          'CRS:84',
+          this.mapService.olMap!.getView().getProjection()
+        )
+      );
   }
 }
