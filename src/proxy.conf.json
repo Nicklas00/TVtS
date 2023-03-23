@@ -1,26 +1,26 @@
 {
-    "/postgis": {
-        "target": "http://localhost/geoserver",
-        "secure": true,
-        "changeOrigin": true,
-        "logLevel": "debug"
-    },
-    "/autocomplete": {
-        "target": "https://dawa.aws.dk",
-        "secure": true,
-        "changeOrigin": true,
-        "logLevel": "debug"
-    },
-    "/api": {
-        "target": "http://localhost:8082",
-        "secure": true,
-        "changeOrigin": true,
-        "logLevel": "debug"
-    },
-    "/adgangsadresser": {
-        "target": "https://api.dataforsyningen.dk",
-        "secure": true,
-        "changeOrigin": true,
-        "logLevel": "debug"
-    }
+  "/postgis": {
+    "target": "http://localhost/geoserver",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/autocomplete": {
+    "target": "https://dawa.aws.dk",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api": {
+    "target": "http://localhost:8082",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/adgangsadresser": {
+    "target": "https://api.dataforsyningen.dk",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
 }
