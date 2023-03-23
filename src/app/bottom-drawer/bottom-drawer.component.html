@@ -1,8 +1,20 @@
 <div id="info-box">
-    <li *ngFor="let feature of featuresList">
-        <span>Rute: {{feature.get("category")}}</span>
-        <p>Længde: {{feature.get("length")}}m</p>
-        <p>Forventet rejse tid: {{feature.get("duration")}}s</p>
-        <p>Transportmiddel: {{feature.get("mode")}}</p>
+    <li *ngFor="let feature of featuresList" id="features-list">
+        <mat-card class="feature-card">
+            <mat-card-header>
+              <mat-card-title-group>
+                <mat-card-title>Rute: {{feature.get("category")}}</mat-card-title>
+                </mat-card-title-group>
+            </mat-card-header>
+            <mat-card-content>
+                Længde: {{feature.get("length")}}m
+            </mat-card-content>
+            <mat-card-content>
+                Forventet rejse tid: {{feature.get("duration")}}s
+            </mat-card-content>
+            <mat-card-content>
+                Transportmiddel: {{feature.get("mode")}}
+            </mat-card-content>
+          </mat-card>
     </li>
 </div>
