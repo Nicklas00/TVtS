@@ -1,4 +1,76 @@
+.example-form {
+    min-width: 160px;
+    max-width: 350px;
+    width: 90%;
+    }
+    
+    .example-full-width {
+      width: 100%;
+    }
+    
+    .example-input {
+      max-width: 100%;
+      width: 300px;
+    }
+
 .marker-img {
     height: 20px;
     width: 20px;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: [first] 40px [line2] 30px [line3] auto [col4-start] 60px [end];
+    grid-template-rows: repeat(4, 25px [row-start]);
+}
+
+#exit-btn {
+    grid-column-start: first;
+    grid-row-start: row-start 0;
+    justify-self: start;
+}
+
+.auto1 {
+    grid-column-start: line3;
+    grid-row-start: row-start 1;
+    align-self: center;
+}
+
+.auto2 {
+    grid-column-start: line3;
+    grid-row-start: row-start 3;
+    align-self: center;
+}
+
+#dot-marker {
+    grid-column-start: line2;
+    grid-row-start: row-start 1;
+    justify-self: end;
+    align-self: center;
+}
+
+#pin-marker {
+    grid-column-start: line2;
+    grid-row-start: row-start 3;
+    justify-self: end;
+    align-self: center;
+}
+
+#mode-change {
+    grid-column-start: line3;
+    grid-row-start: row-start 4;
+    justify-self: start;
+    align-self: center;
+}
+
+#route-btn {
+    grid-column-start: col4-start;
+    grid-row-start: row-start 4;
+    justify-self: end;
+}
+
+#switch-address-btn {
+    grid-column-start: col4-start;
+    grid-row-start: row-start 2;
+    justify-self: start;
 }
