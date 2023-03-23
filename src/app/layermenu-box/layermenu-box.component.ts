@@ -26,6 +26,19 @@ export class LayermenuBoxComponent {
 
   sub: Subscription | undefined;
   index = 0;
+  y = true;
+  x = 0;
+  showFilter() {
+    if (this.x == 0) {
+      this.y = true;
+      this.x = 1;
+      console.log('if: ' + this.y + ' x: ' + this.x);
+    } else {
+      this.y = false;
+      this.x = 0;
+      console.log('else: ' + this.y);
+    }
+  }
 
   loopYear(
     isChecked: any,

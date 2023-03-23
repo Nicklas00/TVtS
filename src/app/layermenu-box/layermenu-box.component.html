@@ -1,112 +1,40 @@
-<div id="layer-menu-box">
-  <h4>Filtrer data</h4>
+<button mat-icon-button #button1 id="button1" (click)="showFilter()">
+  <mat-icon>more_vert</mat-icon>
+</button>
+<div [hidden]="y">
+  <div id="layer-menu-box">
+    <h4>Filtrer data</h4>
 
-  <p *ngIf="id3.checked">Data fra: {{ year[index - 1] }}</p>
+    <p *ngIf="id3.checked">Data fra: {{ year[index - 1] }}</p>
 
-  <mat-checkbox
-    #id1
-    id="1"
-    color="primary"
-    type="checkbox"
-    (click)="enableLayer($event, id1.id)"
-    checked
-  >
-    Lag Aktiveret
-  </mat-checkbox>
-
-  <mat-checkbox
-    #id2
-    id="2"
-    color="primary"
-    type="checkbox"
-    (click)="enableLayer($event, id2.id)"
-  >
-    Aktiver grid analyse
-  </mat-checkbox>
-  <mat-checkbox
-    #id3
-    id="3"
-    color="primary"
-    type="checkbox"
-    (click)="
-      loopYear(
-        $event,
-        type.value,
-        time.value,
-        date1.value,
-        date2.value,
-        serious.value,
-        day.value
-      )
-    "
-  >
-    Loop år
-  </mat-checkbox>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Vælg lag</mat-label>
-    <mat-select
-      #layer
-      name="layer"
-      id="layer"
-      (selectionChange)="layerSelect(layer.value)"
+    <mat-checkbox
+      #id1
+      id="1"
+      color="primary"
+      type="checkbox"
+      (click)="enableLayer($event, id1.id)"
+      checked
     >
-      <mat-option value="0">Normal</mat-option>
-      <mat-option value="1">Anden farve</mat-option>
-      <mat-option value="2">Weighted</mat-option>
-      <mat-option value="3">Stor radius</mat-option>
-      <mat-option value="4">Datapunkter</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br />
-  Søg efter måned
-  <br />
-  <input
-    #date1
-    type="month"
-    name="date1"
-    id="date1"
-    min="2017-01"
-    max="2022-12"
-    (change)="
-      filterControl(
-        type.value,
-        time.value,
-        date1.value,
-        date2.value,
-        serious.value,
-        day.value
-      )
-    "
-  />
-  ->
-  <input
-    #date2
-    type="month"
-    name="date2"
-    id="date2"
-    min="2017-01"
-    max="2022-12"
-    (change)="
-      filterControl(
-        type.value,
-        time.value,
-        date1.value,
-        date2.value,
-        serious.value,
-        day.value
-      )
-    "
-  /><br />
+      Lag Aktiveret
+    </mat-checkbox>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Tid</mat-label>
-    <mat-select
-      [formControl]="alle"
-      #time
-      name="filterByClock"
-      (selectionChange)="
-        filterControl(
+    <mat-checkbox
+      #id2
+      id="2"
+      color="primary"
+      type="checkbox"
+      (click)="enableLayer($event, id2.id)"
+    >
+      Aktiver grid analyse
+    </mat-checkbox>
+    <mat-checkbox
+      #id3
+      id="3"
+      color="primary"
+      type="checkbox"
+      (click)="
+        loopYear(
+          $event,
           type.value,
           time.value,
           date1.value,
@@ -116,25 +44,35 @@
         )
       "
     >
-      <mat-option ng-selected value="0">Alle</mat-option>
-      <mat-option value="1">00.00-05.59</mat-option>
-      <mat-option value="2">06.00-08.59</mat-option>
-      <mat-option value="3">09.00-11.59</mat-option>
-      <mat-option value="4">12.00-15.59</mat-option>
-      <mat-option value="5">16.00-18.59</mat-option>
-      <mat-option value="6">19.00-21.59</mat-option>
-      <mat-option value="7">22.00-23.59</mat-option>
-    </mat-select>
-  </mat-form-field>
+      Loop år
+    </mat-checkbox>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Alvorlighed</mat-label>
-    <mat-select
-      [formControl]="alle"
-      #serious
-      name="seriousness"
-      id="seriousness"
-      (selectionChange)="
+    <mat-form-field appearance="fill">
+      <mat-label>Vælg lag</mat-label>
+      <mat-select
+        #layer
+        name="layer"
+        id="layer"
+        (selectionChange)="layerSelect(layer.value)"
+      >
+        <mat-option value="0">Normal</mat-option>
+        <mat-option value="1">Anden farve</mat-option>
+        <mat-option value="2">Weighted</mat-option>
+        <mat-option value="3">Stor radius</mat-option>
+        <mat-option value="4">Datapunkter</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br />
+    Søg efter måned
+    <br />
+    <input
+      #date1
+      type="month"
+      name="date1"
+      id="date1"
+      min="2017-01"
+      max="2022-12"
+      (change)="
         filterControl(
           type.value,
           time.value,
@@ -144,57 +82,124 @@
           day.value
         )
       "
-    >
-      <mat-option value="0">Alle</mat-option>
-      <mat-option value="1">Mindre alvorlig</mat-option>
-      <mat-option value="2">Alvorlig</mat-option>
-    </mat-select>
-  </mat-form-field>
+    />
+    ->
+    <input
+      #date2
+      type="month"
+      name="date2"
+      id="date2"
+      min="2017-01"
+      max="2022-12"
+      (change)="
+        filterControl(
+          type.value,
+          time.value,
+          date1.value,
+          date2.value,
+          serious.value,
+          day.value
+        )
+      "
+    /><br />
 
-  <mat-form-field appearance="fill">
-    <mat-label>Dag</mat-label>
-    <mat-select
-      [formControl]="alle"
-      #day
-      name="dag"
-      id="dag"
-      (selectionChange)="
-        filterControl(
-          type.value,
-          time.value,
-          date1.value,
-          date2.value,
-          serious.value,
-          day.value
-        )
-      "
-    >
-      <mat-option value="0">Alle</mat-option>
-      <mat-option value="1">Hverdag</mat-option>
-      <mat-option value="2">Weekend</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Traffikant</mat-label>
-    <mat-select
-      [formControl]="alle"
-      #type
-      name="type"
-      id="type"
-      (selectionChange)="
-        filterControl(
-          type.value,
-          time.value,
-          date1.value,
-          date2.value,
-          serious.value,
-          day.value
-        )
-      "
-    >
-      <mat-option value="0">Alle</mat-option>
-      <mat-option value="1">Blød trafikant</mat-option>
-      <mat-option value="2">Motorkøretøj</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Tid</mat-label>
+      <mat-select
+        [formControl]="alle"
+        #time
+        name="filterByClock"
+        (selectionChange)="
+          filterControl(
+            type.value,
+            time.value,
+            date1.value,
+            date2.value,
+            serious.value,
+            day.value
+          )
+        "
+      >
+        <mat-option ng-selected value="0">Alle</mat-option>
+        <mat-option value="1">00.00-05.59</mat-option>
+        <mat-option value="2">06.00-08.59</mat-option>
+        <mat-option value="3">09.00-11.59</mat-option>
+        <mat-option value="4">12.00-15.59</mat-option>
+        <mat-option value="5">16.00-18.59</mat-option>
+        <mat-option value="6">19.00-21.59</mat-option>
+        <mat-option value="7">22.00-23.59</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Alvorlighed</mat-label>
+      <mat-select
+        [formControl]="alle"
+        #serious
+        name="seriousness"
+        id="seriousness"
+        (selectionChange)="
+          filterControl(
+            type.value,
+            time.value,
+            date1.value,
+            date2.value,
+            serious.value,
+            day.value
+          )
+        "
+      >
+        <mat-option value="0">Alle</mat-option>
+        <mat-option value="1">Mindre alvorlig</mat-option>
+        <mat-option value="2">Alvorlig</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Dag</mat-label>
+      <mat-select
+        [formControl]="alle"
+        #day
+        name="dag"
+        id="dag"
+        (selectionChange)="
+          filterControl(
+            type.value,
+            time.value,
+            date1.value,
+            date2.value,
+            serious.value,
+            day.value
+          )
+        "
+      >
+        <mat-option value="0">Alle</mat-option>
+        <mat-option value="1">Hverdag</mat-option>
+        <mat-option value="2">Weekend</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Traffikant</mat-label>
+      <mat-select
+        [formControl]="alle"
+        #type
+        name="type"
+        id="type"
+        (selectionChange)="
+          filterControl(
+            type.value,
+            time.value,
+            date1.value,
+            date2.value,
+            serious.value,
+            day.value
+          )
+        "
+      >
+        <mat-option value="0">Alle</mat-option>
+        <mat-option value="1">Blød trafikant</mat-option>
+        <mat-option value="2">Motorkøretøj</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </div>
