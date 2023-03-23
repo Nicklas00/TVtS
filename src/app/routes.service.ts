@@ -17,7 +17,7 @@ import {
 import { ControlService } from './control.service';
 import { MapService } from './map.service';
 import { Route } from './Route';
-import { RouteRequest } from './RouteRequest';
+import { RouteRequest } from './IRouteRequest';
 
 @Injectable({
   providedIn: 'root',
