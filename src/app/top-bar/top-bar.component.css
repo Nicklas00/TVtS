@@ -3,9 +3,12 @@
     top: 10px;
     left: 2%;
     width: 96%;
-    max-width: 400px;
-    height: 150px;
+    max-width: 360px;
+    max-height: 150px;
+    min-height: 60px;
     z-index: 2;
-    background-color: whitesmoke;
-    overflow: auto;
+    background-color: rgb(250, 250, 250);
+    border-radius: 5px;
+    padding: 5px;
+    font-family: 'Roboto', sans-serif;
   }
