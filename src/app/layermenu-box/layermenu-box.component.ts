@@ -27,17 +27,9 @@ export class LayermenuBoxComponent {
   sub: Subscription | undefined;
   index = 0;
   y = true;
-  x = 0;
+
   showFilter() {
-    if (this.x == 0) {
-      this.y = true;
-      this.x = 1;
-      console.log('if: ' + this.y + ' x: ' + this.x);
-    } else {
-      this.y = false;
-      this.x = 0;
-      console.log('else: ' + this.y);
-    }
+    this.y = !this.y;
   }
 
   loopYear(
@@ -236,9 +228,9 @@ export class LayermenuBoxComponent {
 
   removeLayer(id: string) {
     if (id == '1') {
-      this.mapService.removeWMSToMap(this.mapService.testMap, 'AP');
+      this.mapService.removeWMSToMap(this.mapService.olMap, 'AP');
     } else {
-      this.mapService.removeWMSToMap(this.mapService.testMap, 'grid');
+      this.mapService.removeWMSToMap(this.mapService.olMap, 'grid');
     }
     console.log('removed layer');
   }
@@ -246,14 +238,14 @@ export class LayermenuBoxComponent {
   addLayer(id: string) {
     if (id == '1') {
       this.mapService.addWMSToMap(
-        this.mapService.testMap,
+        this.mapService.olMap,
         this.mapService.pointsSource!,
         'AP',
         5
       );
     } else {
       this.mapService.addWMSToMap(
-        this.mapService.testMap,
+        this.mapService.olMap,
         this.mapService.gridSource!,
         'grid',
         5
