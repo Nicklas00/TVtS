@@ -4,7 +4,7 @@
   left: 2%;
   width: 96%;
   max-width: 400px;
-  height: 300px;
+  height: 270px;
   z-index: 2;
   background-color: whitesmoke;
   overflow: auto;
@@ -19,8 +19,8 @@
 }
 
 mat-form-field {
-  width: 50%;
-  height: 50%;
+  width: 25%;
+  height: 25%;
 }
 
 mat-label {
