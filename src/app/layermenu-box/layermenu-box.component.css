@@ -3,19 +3,21 @@
   top: 220px;
   left: 2%;
   width: 96%;
-  max-width: 400px;
+  max-width: 370px;
   height: 270px;
   z-index: 2;
   background-color: whitesmoke;
   overflow: auto;
+  border-radius: 5px;
 }
 
 #button1 {
   position: absolute;
-  top: 160px;
+  top: 145px;
   left: 2%;
   z-index: 3;
   background-color: whitesmoke;
+  opacity: 95%;
 }
 
 mat-form-field {
@@ -29,8 +31,4 @@ mat-label {
 
 mat-option {
   font-size: 12px;
-}
-
-.mat-icon {
-  font-size: 20px;
 }
